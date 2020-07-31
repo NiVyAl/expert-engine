@@ -4,7 +4,7 @@ namespace euro
 {
 	public class City
 	{
-		private Dictionary<string, int> coins;
+		private Dictionary<string, int> coins = new Dictionary<string, int>();
 		public Dictionary<string, int> Coins
 		{
 			get
@@ -23,7 +23,7 @@ namespace euro
 		{
 			this.country = country;
 			this.countries = countries;
-			coins[country] = 1000000;
+			coins.Add(country, 1000000);
 		}
 
 		public bool dayPassed(Dictionary<string, int> nearCitiesCountry) // nearCitiesCountry - каких стран города граничат с данным городом <"spain", 2> (два испанских города рядом)
