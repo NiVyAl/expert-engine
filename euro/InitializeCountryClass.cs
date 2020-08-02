@@ -19,18 +19,23 @@ namespace euro
 			cityCount = xLength * yLength;
 		}
 
-		public int allCities()
+		public int[,][] allCities() // возвращает координаты всех городов
 		{
 			Console.WriteLine(countryName);
-			//int [] [,] a = new int[2][xLength, yLength];
-			for (int i = 0; i < 2; i++)
+			int[,][] a = new int[xLength, yLength] [];
+			for (int i = 0; i < xLength; i++)
 			{
-				for (int j = 0; j < cityCount; j++)
+				for (int j = 0; j < yLength; j++)
 				{
-					
+					a[i, j] = new int[2];
+					a[i, j][0] = x1 + i; // x
+					a[i, j][1] = y1 + j; // y
+
+					//Console.WriteLine($"{a[i, j][0]} {a[i, j][1]}");
 				}
+				//Console.WriteLine();
 			}
-			return 0;
+			return a;
 		}
 	}
 }
