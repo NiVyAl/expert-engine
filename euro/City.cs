@@ -2,8 +2,15 @@ using System;
 using System.Collections.Generic;
 namespace euro
 {
-	public class City
+	public abstract class AbstractCity
 	{
+		public abstract void giveCoins();
+		public abstract bool takeCoins(Dictionary<string, int> takenCoins);
+	}
+
+	public class City : AbstractCity
+	{
+		/* интерфейсы */
 		private Dictionary<string, int> coins = new Dictionary<string, int>();
 		public Dictionary<string, int> Coins
 		{
@@ -28,28 +35,49 @@ namespace euro
 				givenCons = value;
 			}
 		}
+		/* */
 
-		private string country;
-		public City(string country)
+		public City(string country, string[] countries)
 		{
-			this.country = country;
-			coins.Add(country, 1000000);
+			foreach(string i in countries)
+			{
+				coins.Add(country, 0);
+			}
+			coins[country] = 1000000;
 		}
 
-		public void giveCoins()
+
+		public override void giveCoins() // какие монеты отдает город
 		{
 			foreach (var i in coins.Keys)
 			{
-				givenCons[i] = coins[i] / 100; // возможно нужно сделать add
+				if (coins[i] > 0)
+				{
+					givenCons.Add(i, coins[i] / 100);
+				}
+				
 			}
 
 		}
 
-		public bool takeCoins(Dictionary<string, int> takenCoins) // возвращает закончен ли город (есть ли все монеты)
+		public override bool takeCoins(Dictionary<string, int> takenCoins) // получает 1000 монет. возвращает закончен ли город (есть ли все монеты) 
 		{
+			foreach (var i in coins.Keys) 
+			{
+				coins[i] = coins[i] - coins[i] / 100; // вычитаю монеты
+				coins[i] = coins[i] + takenCoins[i]; // прибавляю полученные монеты
+			}
 
+			foreach (var i in coins.Keys) // проверяю есть ли монеты каждой страны
+			{
+				if (coins[i] == 0)
+				{
+					return false;
+				}
+			}
 
-			return false;
+			return true;
+			
 		}
 
 		//public bool dayPassed(Dictionary<string, int> nearCitiesCountry) // nearCitiesCountry - каких стран города граничат с данным городом <"spain", 2> (два испанских города рядом)
