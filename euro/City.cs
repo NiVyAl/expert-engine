@@ -4,8 +4,11 @@ namespace euro
 {
 	public abstract class AbstractCity
 	{
+
 		public abstract void giveCoins();
 		public abstract bool takeCoins(Dictionary<string, int> takenCoins);
+		public abstract Dictionary<string, int> GivenCoins { get; set; }
+		public abstract String Country { get; set; }
 	}
 
 	public class City : AbstractCity
@@ -24,15 +27,28 @@ namespace euro
 			}
 		}
 		private Dictionary<string, int> givenCons = new Dictionary<string, int>();
-		public Dictionary<string, int> GivenCons
+		public override Dictionary<string, int> GivenCoins
 		{
 			get
 			{
 				return givenCons;
 			}
-			private set
+			set
 			{
-				givenCons = value;
+				//givenCons = value;
+			}
+		}
+
+		private string country;
+		public override string Country
+		{
+			get
+			{
+				return country;
+			}
+			set
+			{
+				//givenCons = value;
 			}
 		}
 		/* */
@@ -41,9 +57,10 @@ namespace euro
 		{
 			foreach(string i in countries)
 			{
-				coins.Add(country, 0);
+				coins.Add(i, 0);
 			}
 			coins[country] = 1000000;
+			this.country = country;
 		}
 
 

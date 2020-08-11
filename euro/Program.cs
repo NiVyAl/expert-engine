@@ -6,35 +6,71 @@ namespace euro
     {
         static void Main(string[] args)
         {
-            //string path = @"C:\SomeDir\hta.txt";
-            //City Paris = new City("Paris", countries);
-            //Paris.
+			string[] countries = new string[3] { "France", "Spain", "Portugal" };
+            InitializeCountryClass France = new InitializeCountryClass("France", 1, 4, 4, 6);
+            InitializeCountryClass Spain = new InitializeCountryClass("Spain", 3, 1, 6, 3);
+            InitializeCountryClass Portugal = new InitializeCountryClass("Portugal", 1, 1, 2, 2);
 
-            string[] countries = new string[3] { "Netherlands", "France", "Germany" };
-            InitializeCountryClass Netherlands = new InitializeCountryClass("Netherlands", 1, 1, 2, 2);
-			InitializeCountryClass France = new InitializeCountryClass("France", 3, 1, 6, 3);
-			InitializeCountryClass Germany = new InitializeCountryClass("Germany", 1, 4, 4, 6);
-            Netherlands.allCities();
-            France.allCities();
-            Germany.allCities();
+			/* Заполнение Городами */
+			AbstractCity[,] AllCity = new AbstractCity[100, 100];
+			for (int i = 0; i < France.AllCities.GetLength(0); i++)
+			{
+				for (int j = 0; j < France.AllCities.GetLength(1); j++)
+				{
+					int a = France.AllCities[i, j][0];
+					int b = France.AllCities[i, j][1];
+					AllCity[a, b] = new City("France", countries);
 
-            AbstractCity[,] NCity = new AbstractCity[Netherlands.allCities().GetLength(0), Netherlands.allCities().GetLength(1)];
-            for (int i = 0; i < Netherlands.allCities().GetLength(0); i++)
-            {
-                for (int j = 0; j < Netherlands.allCities().GetLength(1); j++)
-                {
-					NCity[i, j] = new City("Netherlands", countries);
+					//AllCity[a, b].giveCoins();
+					//Console.WriteLine($"a:{a}, b:{b},  {AllCity[a, b].GivenCons}");
+					//Console.WriteLine(AllCity[i, j] == null);
 				}
-            }
+			}
+			for (int i = 0; i < Spain.AllCities.GetLength(0); i++)
+			{
+				for (int j = 0; j < Spain.AllCities.GetLength(1); j++)
+				{
+					int a = Spain.AllCities[i, j][0];
+					int b = Spain.AllCities[i, j][1];
+					AllCity[a, b] = new City("Spain", countries);
 
-            for (int i = 0; i < Netherlands.allCities().GetLength(0); i++)
-            {
-                for (int j = 0; j < Netherlands.allCities().GetLength(1); j++)
-                {
-                    NCity[i, j].giveCoins();
-                    Console.WriteLine(NCity[i, j].GivenCons);
-                }
-            }
-        }
+					//AllCity[a, b].giveCoins();
+					//Console.WriteLine($"a:{a}, b:{b},  {AllCity[a, b].GivenCons}");
+					//Console.WriteLine(AllCity[i, j] == null);
+				}
+			}
+			for (int i = 0; i < Portugal.AllCities.GetLength(0); i++)
+			{
+				for (int j = 0; j < Portugal.AllCities.GetLength(1); j++)
+				{
+					int a = Portugal.AllCities[i, j][0];
+					int b = Portugal.AllCities[i, j][1];
+					AllCity[a, b] = new City("Portugal", countries);
+
+					//AllCity[a, b].giveCoins();
+					//Console.WriteLine($"a:{a}, b:{b},  {AllCity[a, b].GivenCons}");
+					//Console.WriteLine(AllCity[i, j] == null);
+				}
+			}
+			/*  */
+
+			/* вывожу сколько в каком городе монет*/
+			for (int i = 0; i < AllCity.GetLength(0); i++)
+			{
+				for (int j = 0; j < AllCity.GetLength(1); j++)
+				{
+					if (AllCity[i, j] != null)
+					{
+						AllCity[i, j].giveCoins();
+						Console.WriteLine(AllCity[i, j].Country);
+						ConsoleWrite.Wr(AllCity[i, j].GivenCoins);
+					}
+				}
+			}
+			/* */
+
+
+
+		}
     }
 }

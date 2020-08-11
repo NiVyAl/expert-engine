@@ -6,6 +6,20 @@ namespace euro
 		private string countryName;
 		private int x1, x2, y1, y2;
 		private int xLength, yLength, cityCount;
+
+		private int[,][] allCities;
+		public int[,][] AllCities
+		{
+			get
+			{
+				return allCities;
+			}
+			private set
+			{
+				allCities = value;
+			}
+		}
+
 		public InitializeCountryClass(string countryName, int x1, int y1, int x2, int y2)
 		{
 			this.countryName = countryName;
@@ -17,11 +31,13 @@ namespace euro
 			xLength = Math.Abs(x2 - x1) + 1;
 			yLength = Math.Abs(y2 - y1) + 1;
 			cityCount = xLength * yLength;
+
+			allCities = computAllCities();
 		}
 
-		public int[,][] allCities() // возвращает координаты всех городов
+		public int[,][] computAllCities() // возвращает координаты всех городов
 		{
-			Console.WriteLine(countryName);
+			//Console.WriteLine(countryName);
 			int[,][] a = new int[xLength, yLength] [];
 			for (int i = 0; i < xLength; i++)
 			{
