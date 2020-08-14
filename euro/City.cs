@@ -58,9 +58,12 @@ namespace euro
 			foreach(string i in countries)
 			{
 				coins.Add(i, 0);
+				givenCons.Add(i, 0); // заполняю givenCoins чтобы там были все ключи
 			}
 			coins[country] = 1000000;
 			this.country = country;
+			//ConsoleWrite.Wr(coins);
+			//Console.WriteLine("---------------");
 		}
 
 
@@ -70,7 +73,7 @@ namespace euro
 			{
 				if (coins[i] > 0)
 				{
-					givenCons.Add(i, coins[i] / 100);
+					givenCons[i] = coins[i] / 100;
 				}
 				
 			}
@@ -79,10 +82,24 @@ namespace euro
 
 		public override bool takeCoins(Dictionary<string, int> takenCoins) // получает 1000 монет. возвращает закончен ли город (есть ли все монеты) 
 		{
-			foreach (var i in coins.Keys) 
+			Dictionary<string, int> tempCollection = new Dictionary<string, int>(); // (что-то сделать получше!!!)
+			foreach (var i in coins.Keys) // перекидываем всех в новую коллекцию
 			{
-				coins[i] = coins[i] - coins[i] / 100; // вычитаю монеты
-				coins[i] = coins[i] + takenCoins[i]; // прибавляю полученные монеты
+				tempCollection.Add(i, coins[i]);
+			}
+
+			foreach (var i in coins.Keys)
+			{
+				tempCollection[i] = coins[i] - coins[i] / 100; // вычитаю монеты
+				if (takenCoins.ContainsKey(i))
+				{
+					//ConsoleWrite.Wr(takenCoins[i]);
+					tempCollection[i] = tempCollection[i] + takenCoins[i]; // прибавляю полученные монеты
+				}
+			}
+			foreach (var i in tempCollection.Keys) // перекидываем всех из темповой коллекции
+			{
+				coins[i] = tempCollection[i];
 			}
 
 			foreach (var i in coins.Keys) // проверяю есть ли монеты каждой страны
