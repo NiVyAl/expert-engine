@@ -47,9 +47,17 @@ namespace euro
 			/*  */
 
 			/* Проход дней */
-			for (int k = 0; k < 382; k++) // 2 дня
+			int days = 0;
+			int FranceDays = 0;
+			int SpainDays = 0;
+			int PortugalDays = 0;
+			while (days >=0)
 			{
-
+				if (PortugalDays != 0 && FranceDays != 0 && SpainDays != 0)
+				{
+					break;
+				}
+				days++;
 				for (int i = 0; i < AllCity.GetLength(0); i++) // все показывают какие монеты отдают
 				{
 					for (int j = 0; j < AllCity.GetLength(1); j++)
@@ -97,6 +105,85 @@ namespace euro
 					}
 				}
 
+
+				/* проверка на завершение страны */
+		
+				if (FranceDays == 0)
+				{
+					int tempFrance = 0; // УДАЛИТЬ (не нужно)
+					bool isCanCheckF = true;
+					for (int i = 0; i < France.AllCities.GetLength(0) && isCanCheckF; i++)
+					{
+						for (int j = 0; j < France.AllCities.GetLength(1); j++)
+						{
+							int a = France.AllCities[i, j][0];
+							int b = France.AllCities[i, j][1];
+							if (AllCity[a, b].IsComplete == false) // если город не закончен
+							{
+								tempFrance = 0;
+								isCanCheckF = false;
+								break;
+							}
+							else
+							{
+								tempFrance = days;
+							}
+						}
+					}
+					FranceDays = tempFrance;
+				}
+
+				if (SpainDays == 0)
+				{
+					bool isCanCheckS = true;
+					int tempSpain = 0; // УДАЛИТЬ (не нужно)
+					for (int i = 0; i < Spain.AllCities.GetLength(0) && isCanCheckS; i++)
+					{
+						for (int j = 0; j < Spain.AllCities.GetLength(1); j++)
+						{
+							int a = Spain.AllCities[i, j][0];
+							int b = Spain.AllCities[i, j][1];
+							if (AllCity[a, b].IsComplete == false)
+							{
+								tempSpain = 0;
+								isCanCheckS = false;
+								break;
+							}
+							else
+							{
+								tempSpain = days;
+							}
+						}
+					}
+					SpainDays = tempSpain;
+				}
+
+				if (PortugalDays == 0)
+				{
+					bool isCanCheckP = true;
+					int tempPortugal = 0; // УДАЛИТЬ (не нужно)
+					for (int i = 0; i < Portugal.AllCities.GetLength(0) && isCanCheckP; i++)
+					{
+						for (int j = 0; j < Portugal.AllCities.GetLength(1); j++)
+						{
+							int a = Portugal.AllCities[i, j][0];
+							int b = Portugal.AllCities[i, j][1];
+							if (AllCity[a, b].IsComplete == false)
+							{
+								tempPortugal = 0;
+								isCanCheckP = false;
+								break;
+							}
+							else
+							{
+								tempPortugal = days;
+							}
+						}
+					}
+					PortugalDays = tempPortugal;
+				}
+				/* */
+
 			}
 			/* */
 
@@ -111,12 +198,17 @@ namespace euro
 						AllCity[i, j].giveCoins();
 						Console.WriteLine($"{AllCity[i, j].Country} {i}, {j}");
 						ConsoleWrite.Wr(AllCity[i, j].Coins);
-						Console.WriteLine("");
-						ConsoleWrite.Wr(AllCity[i, j].GivenCoins);
+						//Console.WriteLine(AllCity[i, j].IsComplete);
+						//Console.WriteLine("");
+						//ConsoleWrite.Wr(AllCity[i, j].GivenCoins);
 						Console.WriteLine("");
 					}
 				}
 			}
+
+			Console.WriteLine($"France: {FranceDays}");
+			Console.WriteLine($"Spain: {SpainDays}");
+			Console.WriteLine($"Portugal: {PortugalDays}");
 			/* */
 		}
 	}
