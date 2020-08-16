@@ -37,7 +37,6 @@ namespace euro
 
 		public int[,][] computAllCities() // возвращает координаты всех городов
 		{
-			//Console.WriteLine(countryName);
 			int[,][] a = new int[xLength, yLength] [];
 			for (int i = 0; i < xLength; i++)
 			{
@@ -46,10 +45,7 @@ namespace euro
 					a[i, j] = new int[2];
 					a[i, j][0] = x1 + i; // x
 					a[i, j][1] = y1 + j; // y
-
-					//Console.WriteLine($"{a[i, j][0]} {a[i, j][1]}");
 				}
-				//Console.WriteLine();
 			}
 			return a;
 		}

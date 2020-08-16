@@ -7,6 +7,8 @@ namespace euro
 		static void Main(string[] args)
 		{
 			Console.WriteLine("");
+			Console.WriteLine("");
+			Console.WriteLine("");
 			Console.WriteLine("start programm -----------------");
 			string[] countries = new string[3] { "France", "Spain", "Portugal" };
 			InitializeCountryClass France = new InitializeCountryClass("France", 1, 4, 4, 6);
@@ -22,10 +24,6 @@ namespace euro
 					int a = France.AllCities[i, j][0];
 					int b = France.AllCities[i, j][1];
 					AllCity[a, b] = new City("France", countries);
-
-					//AllCity[a, b].giveCoins();
-					//Console.WriteLine($"a:{a}, b:{b},  {AllCity[a, b].GivenCons}");
-					//Console.WriteLine(AllCity[i, j] == null);
 				}
 			}
 			for (int i = 0; i < Spain.AllCities.GetLength(0); i++)
@@ -35,10 +33,6 @@ namespace euro
 					int a = Spain.AllCities[i, j][0];
 					int b = Spain.AllCities[i, j][1];
 					AllCity[a, b] = new City("Spain", countries);
-
-					//AllCity[a, b].giveCoins();
-					//Console.WriteLine($"a:{a}, b:{b},  {AllCity[a, b].GivenCons}");
-					//Console.WriteLine(AllCity[i, j] == null);
 				}
 			}
 			for (int i = 0; i < Portugal.AllCities.GetLength(0); i++)
@@ -48,33 +42,12 @@ namespace euro
 					int a = Portugal.AllCities[i, j][0];
 					int b = Portugal.AllCities[i, j][1];
 					AllCity[a, b] = new City("Portugal", countries);
-
-					//AllCity[a, b].giveCoins();
-					//Console.WriteLine($"a:{a}, b:{b},  {AllCity[a, b].GivenCons}");
-					//Console.WriteLine(AllCity[i, j] == null);
 				}
 			}
 			/*  */
 
-
-			/* Вывожу сколько в каком городе монет */
-			//for (int i = 0; i < AllCity.GetLength(0); i++)
-			//{
-			//	for (int j = 0; j < AllCity.GetLength(1); j++)
-			//	{
-			//		if (AllCity[i, j] != null)
-			//		{
-			//			AllCity[i, j].giveCoins();
-			//			Console.WriteLine(AllCity[i, j].Country);
-			//			ConsoleWrite.Wr(AllCity[i, j].GivenCoins);
-			//		}
-			//	}
-			//}
-			/* */
-
-
 			/* Проход дней */
-			for (int k = 0; k < 1; k++) // 2 дня
+			for (int k = 0; k < 382; k++) // 2 дня
 			{
 
 				for (int i = 0; i < AllCity.GetLength(0); i++) // все показывают какие монеты отдают
@@ -137,7 +110,10 @@ namespace euro
 					{
 						AllCity[i, j].giveCoins();
 						Console.WriteLine($"{AllCity[i, j].Country} {i}, {j}");
+						ConsoleWrite.Wr(AllCity[i, j].Coins);
+						Console.WriteLine("");
 						ConsoleWrite.Wr(AllCity[i, j].GivenCoins);
+						Console.WriteLine("");
 					}
 				}
 			}

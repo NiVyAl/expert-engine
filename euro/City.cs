@@ -6,24 +6,27 @@ namespace euro
 	{
 
 		public abstract void giveCoins();
-		public abstract bool takeCoins(Dictionary<string, int> takenCoins);
+		public abstract void takeCoins(Dictionary<string, int> takenCoins);
 		public abstract Dictionary<string, int> GivenCoins { get; set; }
+		public abstract Dictionary<string, int> Coins { get; set; }
 		public abstract String Country { get; set; }
+		public abstract bool IsComplete { get; set; }
 	}
 
 	public class City : AbstractCity
 	{
 		/* интерфейсы */
+		public override bool IsComplete { get; set; } = false;
 		private Dictionary<string, int> coins = new Dictionary<string, int>();
-		public Dictionary<string, int> Coins
+		public override Dictionary<string, int> Coins
 		{
 			get
 			{
 				return coins;
 			}
-			private set
+			set
 			{
-				coins = value;
+				//coins = value;
 			}
 		}
 		private Dictionary<string, int> givenCons = new Dictionary<string, int>();
@@ -73,14 +76,14 @@ namespace euro
 			{
 				if (coins[i] > 0)
 				{
-					givenCons[i] = coins[i] / 100;
+					givenCons[i] = coins[i] / 1000;
 				}
 				
 			}
 
 		}
 
-		public override bool takeCoins(Dictionary<string, int> takenCoins) // получает 1000 монет. возвращает закончен ли город (есть ли все монеты) 
+		public override void takeCoins(Dictionary<string, int> takenCoins) // получает 1000 монет. возвращает закончен ли город (есть ли все монеты) 
 		{
 			Dictionary<string, int> tempCollection = new Dictionary<string, int>(); // (что-то сделать получше!!!)
 			foreach (var i in coins.Keys) // перекидываем всех в новую коллекцию
@@ -88,29 +91,27 @@ namespace euro
 				tempCollection.Add(i, coins[i]);
 			}
 
-			foreach (var i in coins.Keys)
+			foreach (var i in tempCollection.Keys)
 			{
-				tempCollection[i] = coins[i] - coins[i] / 100; // вычитаю монеты
+				coins[i] = coins[i] - GivenCoins[i]; // вычитаю монеты
 				if (takenCoins.ContainsKey(i))
 				{
-					//ConsoleWrite.Wr(takenCoins[i]);
-					tempCollection[i] = tempCollection[i] + takenCoins[i]; // прибавляю полученные монеты
+					coins[i] = coins[i] + takenCoins[i]; // прибавляю полученные монеты
 				}
 			}
-			foreach (var i in tempCollection.Keys) // перекидываем всех из темповой коллекции
-			{
-				coins[i] = tempCollection[i];
-			}
+
 
 			foreach (var i in coins.Keys) // проверяю есть ли монеты каждой страны
 			{
 				if (coins[i] == 0)
 				{
-					return false;
+					IsComplete = false;
+					break;
+				} else
+				{
+					IsComplete = true;
 				}
 			}
-
-			return true;
 			
 		}
 
