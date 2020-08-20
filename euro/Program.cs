@@ -6,6 +6,8 @@ namespace euro
     {
 		static void Main(string[] args)
 		{
+			ReadInputClass fileText = new ReadInputClass(@"input/input.in");
+
 			Console.WriteLine("");
 			Console.WriteLine("");
 			Console.WriteLine("");
@@ -189,6 +191,7 @@ namespace euro
 
 
 			/* Вывожу сколько в каком городе монет */
+			/*
 			for (int i = 0; i < AllCity.GetLength(0); i++)
 			{
 				for (int j = 0; j < AllCity.GetLength(1); j++)
@@ -206,9 +209,10 @@ namespace euro
 				}
 			}
 
-			Console.WriteLine($"France: {FranceDays}");
 			Console.WriteLine($"Spain: {SpainDays}");
 			Console.WriteLine($"Portugal: {PortugalDays}");
+			Console.WriteLine($"France: {FranceDays}");
+			*/
 			/* */
 		}
 	}

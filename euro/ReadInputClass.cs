@@ -1,17 +1,33 @@
 using System;
+using System.IO;
+using System.Threading.Tasks;
 namespace euro
 {
 	public class ReadInputClass
 	{
-		public const int countryCount = 3;
-		//private int[][] data = new object[countryCount][];
 
-		//public ReadInputClass(string address)
-		//{
-		//	// читаю файл
+	public ReadInputClass(string address)
+	{
+            using (StreamReader sr = new StreamReader(address, System.Text.Encoding.Default))
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    int numberOfCountry;
+                    int.TryParse(line, out numberOfCountry);
+                    if (numberOfCountry == 0)
+					{
+                        break;
+					}
+                    Console.WriteLine($"{numberOfCountry}:");
 
-		//	data[0] = new object[5];
-		//	data[0][0] = "France"
-		//}
-	}
+                    for (int i = 0; i < numberOfCountry; i++)
+					{
+                        line = sr.ReadLine();
+                        Console.WriteLine(line);
+                    }
+                }
+            }
+        }
+}
 }
