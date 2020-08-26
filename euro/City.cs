@@ -114,25 +114,5 @@ namespace euro
 			}
 			
 		}
-
-		//public bool dayPassed(Dictionary<string, int> nearCitiesCountry) // nearCitiesCountry - каких стран города граничат с данным городом <"spain", 2> (два испанских города рядом)
-		//{
-		//	foreach(var i in nearCitiesCountry.Keys)
-		//	{
-		//		if (i != country) // если соседний город не из нашей страны
-		//		{
-		//			coins[country] = coins[country] - 1000; // монет нашей страны становится меньше
-		//			coins[i] = coins[i] + 1000; // монет соседней страны становится больше
-		//		}
-		//	}
-
-		//	if (coins.Count == country.Length) // если в городе есть монеты всех стран
-		//	{
-		//		return true;
-		//	} else
-		//	{
-		//		return false;
-		//	}
-		//}
 	}
 }
