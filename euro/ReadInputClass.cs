@@ -23,148 +23,150 @@ namespace euro
 					{
                         break;
 					}
-					if (numberOfCountry == 1)
-					{
 
-					} else
-					{
 
-					}
+					AbsractInitializeCountryClass[] Countries = new AbsractInitializeCountryClass[numberOfCountry];
+					string[] countriesNames = new string[numberOfCountry]; // список всех стран
+					int[] countriesDays = new int[numberOfCountry]; // массив сколько дней заполнялась каждая страна
 
-                    AbsractInitializeCountryClass[] Countries = new AbsractInitializeCountryClass[numberOfCountry];
-                    //Console.WriteLine($"{numberOfCountry}:");
-                    string[] countriesNames = new string[numberOfCountry]; // список всех стран
-                    for (int i = 0; i < numberOfCountry; i++)
+					for (int i = 0; i < numberOfCountry; i++)
 					{
                         line = sr.ReadLine();
                         string country = returnCountry(line);
                         int[] coordinates = returnCoordinates(line);
-                        Countries[i] = new InitializeCountryClass(country, coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
-                        countriesNames[i] = country; // массив из названия стран
+						Countries[i] = new InitializeCountryClass(country, coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+						countriesNames[i] = country; // массив из названия стран
                     }
 
-					/* Заполнение Городами */
-					AbstractCity[,] AllCity = new AbstractCity[100, 100];
-					for (int k = 0; k < numberOfCountry; k++)
+					if (numberOfCountry == 1) // если всего одна страна, то она заполняется за 0 дней
 					{
-						for (int i = 0; i < Countries[k].AllCities.GetLength(0); i++)
-						{
-							for (int j = 0; j < Countries[k].AllCities.GetLength(1); j++)
-							{
-								int a = Countries[k].AllCities[i, j][0];
-								int b = Countries[k].AllCities[i, j][1];
-								AllCity[a, b] = new City(Countries[k].CountryName, countriesNames);
-							}
-						}
-					}
-					/* */
-
-					/* Проход дней */
-					int days = 0;
-					int[] countriesDays = new int[numberOfCountry]; // массив сколько дней заполнялась каждая страна 
-					for (int i = 0; i < numberOfCountry; i++)
+						countriesDays[0] = 0;
+					} else
 					{
-						countriesDays[i] = 0; //  заполняем нулями
-					}
-
-					while (days >= 0) // бесконечный цикл
-					{
-						bool isComplete = false;
-						for (int i = 0; i < numberOfCountry; i++) // проверка на завершение всех стран
-						{
-							if (countriesDays[i] == 0)
-							{
-								break;
-							}
-							else
-							{
-								isComplete = true;
-							}
-						}
-						if (isComplete == true)
-						{
-							break;
-						}
-
-						days++;
-
-
-						for (int i = 0; i < AllCity.GetLength(0); i++) // все показывают какие монеты отдают
-						{
-							for (int j = 0; j < AllCity.GetLength(1); j++)
-							{
-								if (AllCity[i, j] != null)
-								{
-									AllCity[i, j].giveCoins();
-								}
-							}
-						}
-
-						for (int i = 0; i < AllCity.GetLength(0); i++) // города получают монеты
-						{
-							for (int j = 0; j < AllCity.GetLength(1); j++)
-							{
-								if (AllCity[i, j] != null)
-								{
-									if (i != 0) // меньше нуля нет координат
-									{
-										if (AllCity[i - 1, j] != null)
-										{
-											AllCity[i, j].takeCoins(AllCity[i - 1, j].GivenCoins);
-										}
-									}
-
-									if (j != 0) // меньше нуля нет координат
-									{
-										if (AllCity[i, j - 1] != null)
-										{
-											AllCity[i, j].takeCoins(AllCity[i, j - 1].GivenCoins);
-										}
-									}
-
-									if (AllCity[i + 1, j] != null)
-									{
-										AllCity[i, j].takeCoins(AllCity[i + 1, j].GivenCoins);
-									}
-
-									if (AllCity[i, j + 1] != null)
-									{
-										AllCity[i, j].takeCoins(AllCity[i, j + 1].GivenCoins);
-									}
-
-								}
-							}
-						}
-
-						/* проверка на завершение страны */
+						/* Заполнение Городами */
+						AbstractCity[,] AllCity = new AbstractCity[100, 100];
 						for (int k = 0; k < numberOfCountry; k++)
 						{
-							if (countriesDays[k] == 0)
+							for (int i = 0; i < Countries[k].AllCities.GetLength(0); i++)
 							{
-								int tempFrance = 0; // УДАЛИТЬ (не нужно)
-								bool isCanCheckF = true;
-								for (int i = 0; i < Countries[k].AllCities.GetLength(0) && isCanCheckF; i++)
+								for (int j = 0; j < Countries[k].AllCities.GetLength(1); j++)
 								{
-									for (int j = 0; j < Countries[k].AllCities.GetLength(1); j++)
-									{
-										int a = Countries[k].AllCities[i, j][0];
-										int b = Countries[k].AllCities[i, j][1];
-										if (AllCity[a, b].IsComplete == false) // если город не закончен
-										{
-											tempFrance = 0;
-											isCanCheckF = false;
-											break;
-										}
-										else
-										{
-											tempFrance = days;
-										}
-									}
+									int a = Countries[k].AllCities[i, j][0];
+									int b = Countries[k].AllCities[i, j][1];
+									AllCity[a, b] = new City(Countries[k].CountryName, countriesNames);
 								}
-								countriesDays[k] = tempFrance;
 							}
 						}
 						/* */
+
+						/* Проход дней */
+						int days = 0;
+						for (int i = 0; i < numberOfCountry; i++)
+						{
+							countriesDays[i] = 0; //  заполняем нулями
+						}
+
+						while (days >= 0) // бесконечный цикл
+						{
+							/* проверка на завершение всех стран */
+							bool isComplete = false;
+							for (int i = 0; i < numberOfCountry; i++)
+							{
+								if (countriesDays[i] == 0)
+								{
+									break;
+								}
+								else
+								{
+									isComplete = true;
+								}
+							}
+							if (isComplete == true)
+							{
+								break;
+							}
+							/* */
+
+							days++;
+
+							for (int i = 0; i < AllCity.GetLength(0); i++) // все показывают какие монеты отдают
+							{
+								for (int j = 0; j < AllCity.GetLength(1); j++)
+								{
+									if (AllCity[i, j] != null)
+									{
+										AllCity[i, j].giveCoins();
+									}
+								}
+							}
+
+							for (int i = 0; i < AllCity.GetLength(0); i++) // города получают монеты
+							{
+								for (int j = 0; j < AllCity.GetLength(1); j++)
+								{
+									if (AllCity[i, j] != null)
+									{
+										if (i != 0) // меньше нуля нет координат
+										{
+											if (AllCity[i - 1, j] != null)
+											{
+												AllCity[i, j].takeCoins(AllCity[i - 1, j].GivenCoins);
+											}
+										}
+
+										if (j != 0) // меньше нуля нет координат
+										{
+											if (AllCity[i, j - 1] != null)
+											{
+												AllCity[i, j].takeCoins(AllCity[i, j - 1].GivenCoins);
+											}
+										}
+
+										if (AllCity[i + 1, j] != null)
+										{
+											AllCity[i, j].takeCoins(AllCity[i + 1, j].GivenCoins);
+										}
+
+										if (AllCity[i, j + 1] != null)
+										{
+											AllCity[i, j].takeCoins(AllCity[i, j + 1].GivenCoins);
+										}
+
+									}
+								}
+							}
+
+							/* проверка на завершение страны */
+							for (int k = 0; k < numberOfCountry; k++)
+							{
+								if (countriesDays[k] == 0)
+								{
+									int tempFrance = 0; // УДАЛИТЬ (не нужно)
+									bool isCanCheckF = true;
+									for (int i = 0; i < Countries[k].AllCities.GetLength(0) && isCanCheckF; i++)
+									{
+										for (int j = 0; j < Countries[k].AllCities.GetLength(1); j++)
+										{
+											int a = Countries[k].AllCities[i, j][0];
+											int b = Countries[k].AllCities[i, j][1];
+											if (AllCity[a, b].IsComplete == false) // если город не закончен
+											{
+												tempFrance = 0;
+												isCanCheckF = false;
+												break;
+											}
+											else
+											{
+												tempFrance = days;
+											}
+										}
+									}
+									countriesDays[k] = tempFrance;
+								}
+							}
+							/* */
+						}
+
 					}
 					/* */
 					
