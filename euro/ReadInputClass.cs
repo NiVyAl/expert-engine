@@ -47,12 +47,11 @@ namespace euro
 						{
 							YMaxCoordinate = coordinates[3];
 						}
+
+						countriesDays[i] = 0; // в начале дни за сколько завершилась каждая страна = 0
 					}
 
-					if (numberOfCountry == 1) // если всего одна страна, то она заполняется за 0 дней
-					{
-						countriesDays[0] = 0;
-					} else
+					if (numberOfCountry > 1) // если всего одна страна, то она заполняется за 0 дней
 					{
 						/* Заполнение Городами */
 						AbstractCity[,] AllCity = new AbstractCity[XMaxCoordinate+1, YMaxCoordinate+1]; // массив с городами (сколько монет в каждом городе), положение города в массиве = координатам города
@@ -72,10 +71,6 @@ namespace euro
 
 						/* Проход дней */
 						int days = 0;
-						for (int i = 0; i < numberOfCountry; i++)
-						{
-							countriesDays[i] = 0; //  заполняем нулями
-						}
 
 						while (days >= 0) // бесконечный цикл
 						{
@@ -100,9 +95,9 @@ namespace euro
 
 							days++;
 
-							for (int i = 0; i < AllCity.GetLength(0); i++) // все показывают какие монеты отдают
+							for (int i = 1; i < AllCity.GetLength(0); i++) // все показывают какие монеты отдают
 							{
-								for (int j = 0; j < AllCity.GetLength(1); j++)
+								for (int j = 1; j < AllCity.GetLength(1); j++)
 								{
 									if (AllCity[i, j] != null)
 									{
@@ -111,13 +106,13 @@ namespace euro
 								}
 							}
 
-							for (int i = 0; i < AllCity.GetLength(0); i++) // города получают монеты
+							for (int i = 1; i < AllCity.GetLength(0); i++) // города получают монеты
 							{
-								for (int j = 0; j < AllCity.GetLength(1); j++)
+								for (int j = 1; j < AllCity.GetLength(1); j++)
 								{
 									if (AllCity[i, j] != null)
 									{
-										if (i != 0) // меньше нуля нет координат
+										if (i-1 >= 1) // меньше единицы нет координат
 										{
 											if (AllCity[i - 1, j] != null)
 											{
@@ -125,7 +120,7 @@ namespace euro
 											}
 										}
 
-										if (j != 0) // меньше нуля нет координат
+										if (j-1 >= 1) // меньше единицы нет координат
 										{
 											if (AllCity[i, j - 1] != null)
 											{
@@ -133,7 +128,7 @@ namespace euro
 											}
 										}
 
-										if (AllCity.GetLength(0) > i+1)
+										if (AllCity.GetLength(0) > i+1) // чтобы не вылезти из размерности массива
 										{
 											if (AllCity[i + 1, j] != null)
 											{
@@ -141,7 +136,7 @@ namespace euro
 											}
 										}
 
-										if (AllCity.GetLength(1) > j + 1)
+										if (AllCity.GetLength(1) > j + 1) // чтобы не вылезти из размерности массива
 										{
 											if (AllCity[i, j + 1] != null)
 											{
@@ -157,7 +152,6 @@ namespace euro
 							{
 								if (countriesDays[k] == 0)
 								{
-									int tempFrance = 0; // УДАЛИТЬ (не нужно)
 									bool isCanCheckF = true;
 									for (int i = 0; i < Countries[k].AllCities.GetLength(0) && isCanCheckF; i++)
 									{
@@ -167,17 +161,16 @@ namespace euro
 											int b = Countries[k].AllCities[i, j][1];
 											if (AllCity[a, b].IsComplete == false) // если город не закончен
 											{
-												tempFrance = 0;
+												countriesDays[k] = 0;
 												isCanCheckF = false;
 												break;
 											}
 											else
 											{
-												tempFrance = days;
+												countriesDays[k] = days;
 											}
 										}
 									}
-									countriesDays[k] = tempFrance;
 								}
 							}
 							/* */

@@ -9,15 +9,17 @@ namespace euro
 		public abstract void takeCoins(Dictionary<string, int> takenCoins);
 		public abstract Dictionary<string, int> GivenCoins { get; set; }
 		public abstract Dictionary<string, int> Coins { get; set; }
-		public abstract String Country { get; set; }
 		public abstract bool IsComplete { get; set; }
 	}
 
 	public class City : AbstractCity
 	{
 		/* интерфейсы */
-		public override bool IsComplete { get; set; } = false;
 		private Dictionary<string, int> coins = new Dictionary<string, int>();
+		private Dictionary<string, int> givenCons = new Dictionary<string, int>();
+
+		public override bool IsComplete { get; set; } = false;
+
 		public override Dictionary<string, int> Coins
 		{
 			get
@@ -26,10 +28,8 @@ namespace euro
 			}
 			set
 			{
-				//coins = value;
 			}
 		}
-		private Dictionary<string, int> givenCons = new Dictionary<string, int>();
 		public override Dictionary<string, int> GivenCoins
 		{
 			get
@@ -38,20 +38,6 @@ namespace euro
 			}
 			set
 			{
-				//givenCons = value;
-			}
-		}
-
-		private string country;
-		public override string Country
-		{
-			get
-			{
-				return country;
-			}
-			set
-			{
-				//givenCons = value;
 			}
 		}
 		/* */
@@ -64,13 +50,12 @@ namespace euro
 				givenCons.Add(i, 0); // заполняю givenCoins чтобы там были все ключи
 			}
 			coins[country] = 1000000;
-			this.country = country;
 			//ConsoleWrite.Wr(coins);
 			//Console.WriteLine("---------------");
 		}
 
 
-		public override void giveCoins() // какие монеты отдает город
+		public override void giveCoins() // вызывается когда наступает новый день, Город через интерфейс GivenCoins показывает какие монеты отдает
 		{
 			foreach (var i in coins.Keys)
 			{
@@ -85,13 +70,7 @@ namespace euro
 
 		public override void takeCoins(Dictionary<string, int> takenCoins) // получает 1000 монет. возвращает закончен ли город (есть ли все монеты) 
 		{
-			Dictionary<string, int> tempCollection = new Dictionary<string, int>(); // (что-то сделать получше!!!)
-			foreach (var i in coins.Keys) // перекидываем всех в новую коллекцию
-			{
-				tempCollection.Add(i, coins[i]);
-			}
-
-			foreach (var i in tempCollection.Keys)
+			foreach (var i in GivenCoins.Keys) // прохожу по GivenCoins, тк у него те же ключи, что и у coins
 			{
 				coins[i] = coins[i] - GivenCoins[i]; // вычитаю монеты
 				if (takenCoins.ContainsKey(i))
