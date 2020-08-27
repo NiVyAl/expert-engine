@@ -25,18 +25,29 @@ namespace euro
 					}
 
 
-					AbsractInitializeCountryClass[] Countries = new AbsractInitializeCountryClass[numberOfCountry];
+					AbsractInitializeCountryClass[] Countries = new AbsractInitializeCountryClass[numberOfCountry]; // хранятся координаты всех городов каждой страны
 					string[] countriesNames = new string[numberOfCountry]; // список всех стран
 					int[] countriesDays = new int[numberOfCountry]; // массив сколько дней заполнялась каждая страна
+					int XMaxCoordinate = 0; // для определения размерности массива городов (AbstractCity[,] AllCity)
+					int YMaxCoordinate = 0; // 
 
 					for (int i = 0; i < numberOfCountry; i++)
 					{
                         line = sr.ReadLine();
                         string country = returnCountry(line);
                         int[] coordinates = returnCoordinates(line);
-						Countries[i] = new InitializeCountryClass(country, coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+						Countries[i] = new InitializeCountryClass(country, x1: coordinates[0], y1: coordinates[1], x2: coordinates[2], y2: coordinates[3]);
 						countriesNames[i] = country; // массив из названия стран
-                    }
+
+						if (coordinates[2] > XMaxCoordinate)
+						{
+							XMaxCoordinate = coordinates[2];
+						}
+						if (coordinates[3] > YMaxCoordinate)
+						{
+							YMaxCoordinate = coordinates[3];
+						}
+					}
 
 					if (numberOfCountry == 1) // если всего одна страна, то она заполняется за 0 дней
 					{
@@ -44,7 +55,7 @@ namespace euro
 					} else
 					{
 						/* Заполнение Городами */
-						AbstractCity[,] AllCity = new AbstractCity[100, 100];
+						AbstractCity[,] AllCity = new AbstractCity[XMaxCoordinate+1, YMaxCoordinate+1]; // массив с городами (сколько монет в каждом городе), положение города в массиве = координатам города
 						for (int k = 0; k < numberOfCountry; k++)
 						{
 							for (int i = 0; i < Countries[k].AllCities.GetLength(0); i++)
@@ -122,16 +133,21 @@ namespace euro
 											}
 										}
 
-										if (AllCity[i + 1, j] != null)
+										if (AllCity.GetLength(0) > i+1)
 										{
-											AllCity[i, j].takeCoins(AllCity[i + 1, j].GivenCoins);
+											if (AllCity[i + 1, j] != null)
+											{
+												AllCity[i, j].takeCoins(AllCity[i + 1, j].GivenCoins);
+											}
 										}
 
-										if (AllCity[i, j + 1] != null)
+										if (AllCity.GetLength(1) > j + 1)
 										{
-											AllCity[i, j].takeCoins(AllCity[i, j + 1].GivenCoins);
+											if (AllCity[i, j + 1] != null)
+											{
+												AllCity[i, j].takeCoins(AllCity[i, j + 1].GivenCoins);
+											}
 										}
-
 									}
 								}
 							}
