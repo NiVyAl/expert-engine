@@ -80,6 +80,7 @@ namespace euro
 							{
 								if (countriesDays[i] == 0)
 								{
+									isComplete = false;
 									break;
 								}
 								else
@@ -152,8 +153,9 @@ namespace euro
 							{
 								if (countriesDays[k] == 0)
 								{
-									bool isCanCheckF = true;
-									for (int i = 0; i < Countries[k].AllCities.GetLength(0) && isCanCheckF; i++)
+									int tempCountriesDays = 0;
+									bool isCanCheck = true;
+									for (int i = 0; i < Countries[k].AllCities.GetLength(0) && isCanCheck; i++)
 									{
 										for (int j = 0; j < Countries[k].AllCities.GetLength(1); j++)
 										{
@@ -161,16 +163,17 @@ namespace euro
 											int b = Countries[k].AllCities[i, j][1];
 											if (AllCity[a, b].IsComplete == false) // если город не закончен
 											{
-												countriesDays[k] = 0;
-												isCanCheckF = false;
+												tempCountriesDays = 0;
+												isCanCheck = false;
 												break;
 											}
 											else
 											{
-												countriesDays[k] = days;
+												tempCountriesDays = days;
 											}
 										}
 									}
+									countriesDays[k] = tempCountriesDays;
 								}
 							}
 							/* */
