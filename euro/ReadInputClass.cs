@@ -74,26 +74,6 @@ namespace euro
 
 						while (days >= 0) // бесконечный цикл
 						{
-							/* проверка на завершение всех стран */
-							bool isComplete = false;
-							for (int i = 0; i < numberOfCountry; i++)
-							{
-								if (countriesDays[i] == 0)
-								{
-									isComplete = false;
-									break;
-								}
-								else
-								{
-									isComplete = true;
-								}
-							}
-							if (isComplete == true)
-							{
-								break;
-							}
-							/* */
-
 							days++;
 
 							for (int i = 1; i < AllCity.GetLength(0); i++) // все показывают какие монеты отдают
@@ -148,12 +128,12 @@ namespace euro
 								}
 							}
 
+							bool isComplete = false;
 							/* проверка на завершение страны */
 							for (int k = 0; k < numberOfCountry; k++)
 							{
 								if (countriesDays[k] == 0)
 								{
-									int tempCountriesDays = 0;
 									bool isCanCheck = true;
 									for (int i = 0; i < Countries[k].AllCities.GetLength(0) && isCanCheck; i++)
 									{
@@ -161,20 +141,38 @@ namespace euro
 										{
 											int a = Countries[k].AllCities[i, j][0];
 											int b = Countries[k].AllCities[i, j][1];
-											if (AllCity[a, b].IsComplete == false) // если город не закончен
+											if (AllCity[a, b].isComplete() == false) // если город не закончен
 											{
-												tempCountriesDays = 0;
+												countriesDays[k] = 0;
 												isCanCheck = false;
 												break;
 											}
 											else
 											{
-												tempCountriesDays = days;
+												countriesDays[k] = days;
 											}
 										}
 									}
-									countriesDays[k] = tempCountriesDays;
 								}
+							}
+							/* */
+
+							/* проверка на завершение всех стран */
+							for (int i = 0; i < numberOfCountry; i++)
+							{
+								if (countriesDays[i] == 0)
+								{
+									isComplete = false;
+									break;
+								}
+								else
+								{
+									isComplete = true;
+								}
+							}
+							if (isComplete == true)
+							{
+								break;
 							}
 							/* */
 						}

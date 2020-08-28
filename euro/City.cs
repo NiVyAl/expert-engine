@@ -6,10 +6,10 @@ namespace euro
 	{
 
 		public abstract void giveCoins();
+		public abstract bool isComplete();
 		public abstract void takeCoins(Dictionary<string, int> takenCoins);
 		public abstract Dictionary<string, int> GivenCoins { get; set; }
 		public abstract Dictionary<string, int> Coins { get; set; }
-		public abstract bool IsComplete { get; set; }
 	}
 
 	public class City : AbstractCity
@@ -17,8 +17,6 @@ namespace euro
 		/* интерфейсы */
 		private Dictionary<string, int> coins = new Dictionary<string, int>();
 		private Dictionary<string, int> givenCons = new Dictionary<string, int>();
-
-		public override bool IsComplete { get; set; } = false;
 
 		public override Dictionary<string, int> Coins
 		{
@@ -78,20 +76,18 @@ namespace euro
 					coins[i] = coins[i] + takenCoins[i]; // прибавляю полученные монеты
 				}
 			}
+		}
 
-
-			foreach (var i in coins.Keys) // проверяю есть ли монеты каждой страны
+		public override bool isComplete() // проверяю есть ли монеты каждой страны
+		{
+			foreach (var i in coins.Keys) 
 			{
 				if (coins[i] == 0)
 				{
-					IsComplete = false;
-					break;
-				} else
-				{
-					IsComplete = true;
+					return false;
 				}
 			}
-			
+			return true;
 		}
 	}
 }
