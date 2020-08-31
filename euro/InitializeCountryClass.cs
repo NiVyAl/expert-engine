@@ -2,7 +2,7 @@ using System;
 namespace euro
 {
 
-	public class InitializeCountryClass
+	public class InitializeCountryClass // класс для высчитывания координат каждой страны
 	{
 		private int x1, x2, y1, y2;
 		private int xLength, yLength, cityCount;

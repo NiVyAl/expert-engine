@@ -6,10 +6,10 @@ namespace euro
 {
 	public class EuroDiffusionClass
 	{
-		private InitializeCountryClass[] _countries; // хранятся координаты всех городов каждой страны
+		private InitializeCountryClass[] _countries; // координаты всех городов каждой страны
 		private int _numberOfCountry; // количество стран
 		private string[] _countriesNames; // список названий всех стран
-		private int[] _countriesDays; // массив сколько дней заполнялась каждая страна 
+		private int[] _countriesDays; // количество дней для заполнения каждой страны
 		private int _XMaxCoordinate; 
 		private int _YMaxCoordinate;
 		private int _caseNumber = 1;
@@ -41,11 +41,12 @@ namespace euro
 						_countriesNames = new string[_numberOfCountry];
 						_countriesDays = new int[_numberOfCountry];
 						_XMaxCoordinate = 0; // для определения размерности массива городов (AbstractCity[,] AllCity)
-						_YMaxCoordinate = 0; // 
+						_YMaxCoordinate = 0; //
 
-						initializeCountries(sr); // Заполняю страны из файла
-						if (_numberOfCountry > 1) // если всего одна страна, то она заполняется за 0 дней
-							daysComput();
+						initializeCountries(sr); // определяются координаты городов каждой страны
+
+						if (_numberOfCountry > 1) // расчет начинается, если количество стран > 1
+							daysComput(); 
 						writeOutput();
 						_caseNumber++;
 					}
@@ -99,24 +100,24 @@ namespace euro
 				string country = returnCountry(line);
 				int[] coordinates = returnCoordinates(line);
 				_countries[i] = new InitializeCountryClass(country, x1: coordinates[0], y1: coordinates[1], x2: coordinates[2], y2: coordinates[3]);
-				_countriesNames[i] = country; // массив из названия стран
+				_countriesNames[i] = country; //  названия стран
 
 				if (coordinates[2] > _XMaxCoordinate)
 					_XMaxCoordinate = coordinates[2];
 				if (coordinates[3] > _YMaxCoordinate)
 					_YMaxCoordinate = coordinates[3];
 
-				_countriesDays[i] = 0; // в начале дни за сколько завершилась каждая страна = 0
+				_countriesDays[i] = 0; // количество дней для заполнения каждой страны первоначально = 0
 			}
 		}
 
 
 		private void daysComput()
 		{
-			/* Заполнение Городами */
+			/* Инициализация каждого города */
 			int xLength = _XMaxCoordinate + 1;
 			int yLength = _YMaxCoordinate + 1;
-			City[,] AllCity = new City[xLength, yLength]; // массив с городами (сколько монет в каждом городе), положение города в массиве = координатам города
+			City[,] AllCity = new City[xLength, yLength]; // создается массив экземпляров класса City для каждого города, положение города в массиве = координатам города
 			for (int k = 0; k < _numberOfCountry; k++)
 			{
 				for (int i = 0; i < _countries[k].AllCities.GetLength(0); i++)
@@ -131,14 +132,14 @@ namespace euro
 			}
 			/* */
 
-			/* Проход дней */
+			/* цикл по дням */
 			int days = 0;
 
-			while (days >= 0) // бесконечный цикл
+			while (days >= 0)
 			{
 				days++;
 
-				for (int i = 1; i < xLength; i++) // все показывают какие монеты отдают
+				for (int i = 1; i < xLength; i++) // высчитывается порция монет для выдачи городом
 				{
 					for (int j = 1; j < yLength; j++)
 					{
@@ -153,27 +154,25 @@ namespace euro
 					{
 						if (AllCity[i, j] != null)
 						{
-							//int[] coordinates = new int[4] {i-1, i+1, j-1, j+1 };
-							//var coord = new { new KeyValuePair<int, int>(i - 1, j) };
-							if (i - 1 >= 1) // меньше единицы нет координат
+							if (i - 1 >= 1) // проверка наличия соседнего города слева
 							{
 								if (AllCity[i - 1, j] != null)
 									AllCity[i, j].takeCoins(AllCity[i - 1, j].GivenCoins);
 							}
 
-							if (j - 1 >= 1) // меньше единицы нет координат
+							if (j - 1 >= 1) // проверка наличия соседнего города снизу
 							{
 								if (AllCity[i, j - 1] != null)
 									AllCity[i, j].takeCoins(AllCity[i, j - 1].GivenCoins);
 							}
 
-							if (AllCity.GetLength(0) > i + 1) // чтобы не вылезти из размерности массива
+							if (AllCity.GetLength(0) > i + 1) // проверка наличия соседнего города справа
 							{
 								if (AllCity[i + 1, j] != null)
 									AllCity[i, j].takeCoins(AllCity[i + 1, j].GivenCoins);
 							}
 
-							if (AllCity.GetLength(1) > j + 1) // чтобы не вылезти из размерности массива
+							if (AllCity.GetLength(1) > j + 1) // проверка наличия соседнего города сверху
 							{
 								if (AllCity[i, j + 1] != null)
 									AllCity[i, j].takeCoins(AllCity[i, j + 1].GivenCoins);
@@ -183,7 +182,7 @@ namespace euro
 				}
 
 				bool isComplete = false;
-				/* проверка на завершение страны */
+				/* проверка на завершение каждой страны */
 				for (int k = 0; k < _numberOfCountry; k++)
 				{
 					if (_countriesDays[k] == 0)
