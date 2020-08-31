@@ -109,7 +109,7 @@ namespace euro
 					{
 						int a = _countries[k].AllCities[i, j][0];
 						int b = _countries[k].AllCities[i, j][1];
-						AllCity[a, b] = new City(_countries[k].CountryName, _countriesNames);
+						AllCity[a, b] = new City(countryIndex: k, _numberOfCountry);
 					}
 				}
 			}
