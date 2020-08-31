@@ -2,90 +2,66 @@ using System;
 using System.Collections.Generic;
 namespace euro
 {
-	public abstract class AbstractCity
+	public class City
 	{
+		private int _initiallyCountCoins = 1000000;
+		private double _portionCoins = 0.001;
+		private Dictionary<string, int> _coins = new Dictionary<string, int>();
+		private Dictionary<string, int> _givenCons = new Dictionary<string, int>();
 
-		public abstract void giveCoins();
-		public abstract bool isComplete();
-		public abstract void takeCoins(Dictionary<string, int> takenCoins);
-		public abstract Dictionary<string, int> GivenCoins { get; set; }
-		public abstract Dictionary<string, int> Coins { get; set; }
-	}
-
-	public class City : AbstractCity
-	{
-		/* интерфейсы */
-		private Dictionary<string, int> coins = new Dictionary<string, int>();
-		private Dictionary<string, int> givenCons = new Dictionary<string, int>();
-
-		public override Dictionary<string, int> Coins
+		public  Dictionary<string, int> Coins
 		{
-			get
-			{
-				return coins;
-			}
-			set
-			{
-			}
+			get { return _coins; }
 		}
-		public override Dictionary<string, int> GivenCoins
+		public  Dictionary<string, int> GivenCoins
 		{
-			get
-			{
-				return givenCons;
-			}
-			set
-			{
-			}
+			get { return _givenCons; }
 		}
-		/* */
 
 		public City(string country, string[] countries)
 		{
 			foreach(string i in countries)
 			{
-				coins.Add(i, 0);
-				givenCons.Add(i, 0); // заполняю givenCoins чтобы там были все ключи
+				_coins.Add(i, 0);
+				_givenCons.Add(i, 0); // заполняю givenCoins чтобы там были все ключи
 			}
-			coins[country] = 1000000;
-			//ConsoleWrite.Wr(coins);
-			//Console.WriteLine("---------------");
+			_coins[country] = _initiallyCountCoins;
 		}
 
 
-		public override void giveCoins() // вызывается когда наступает новый день, Город через интерфейс GivenCoins показывает какие монеты отдает
+		public void giveCoins() // вызывается когда наступает новый день, Город через интерфейс GivenCoins показывает какие монеты отдает
 		{
-			foreach (var i in coins.Keys)
+			foreach (var i in _coins.Keys)
 			{
-				if (coins[i] > 0)
-				{
-					givenCons[i] = coins[i] / 1000;
-				}
-				
+				if (_coins[i] > 0)
+					_givenCons[i] = (int)(_coins[i] * _portionCoins); // !!!!! НОРМ?
 			}
 
 		}
 
-		public override void takeCoins(Dictionary<string, int> takenCoins) // получает 1000 монет. возвращает закончен ли город (есть ли все монеты) 
+		public void takeCoins(Dictionary<string, int> takenCoins) // получает 1000 монет. возвращает закончен ли город (есть ли все монеты) 
 		{
-			foreach (var i in GivenCoins.Keys) // прохожу по GivenCoins, тк у него те же ключи, что и у coins
+			foreach (var i in GivenCoins.Keys) // прохожу по GivenCoins, тк у него те же ключи, что и у _coins
 			{
-				coins[i] = coins[i] - GivenCoins[i]; // вычитаю монеты
+				_coins[i] = _coins[i] - GivenCoins[i]; // вычитаю монеты
 				if (takenCoins.ContainsKey(i))
 				{
-					coins[i] = coins[i] + takenCoins[i]; // прибавляю полученные монеты
+					int a = _coins[i];
+					_coins[i] += takenCoins[i]; // прибавляю полученные монеты
+					//if ((a == 0) && (_coins[i] > 0))
+					//{
+					//	// ДОБАВЬ!!! переменная сколько осталось нулевых стран
+					//}
 				}
 			}
 		}
 
-		public override bool isComplete() // проверяю есть ли монеты каждой страны
+		public bool isComplete() // проверяю есть ли монеты каждой страны
 		{
-			foreach (var i in coins.Keys) 
+			foreach (var i in _coins.Keys) 
 			{
-				if (coins[i] == 0)
-				{
+				if (_coins[i] == 0)
 					return false;
-				}
 			}
 			return true;
 		}

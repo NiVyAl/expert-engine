@@ -1,41 +1,22 @@
 using System;
 namespace euro
 {
-	public abstract class AbsractInitializeCountryClass
-	{
-		public abstract int[,][] AllCities { get; set; }
-		public abstract string CountryName { get; set; }
-	}
 
-	public class InitializeCountryClass : AbsractInitializeCountryClass
+	public class InitializeCountryClass
 	{
 		private int x1, x2, y1, y2;
 		private int xLength, yLength, cityCount;
 
 		private int[,][] allCities;
-		public override int[,][] AllCities
+		public  int[,][] AllCities
 		{
-			get
-			{
-				return allCities;
-			}
-			set
-			{
-				
-			}
+			get { return allCities; }
 		}
 
 		private string countryName;
-		public override string CountryName
+		public  string CountryName
 		{
-			get
-			{
-				return countryName;
-			}
-			set
-			{
-
-			}
+			get { return countryName; }
 		}
 
 		public InitializeCountryClass(string countryName, int x1, int y1, int x2, int y2)
