@@ -4,12 +4,13 @@ namespace euro
 {
 	public class City
 	{
-		private int _initiallyCountCoins = 1000000;
-		private double _portionCoins = 0.001;
+		private const int _initiallyCountCoins = 1000000;
+		private const double _portionCoins = 0.001;
 
 		private int _numberOfCountry;
 		private int[] _coins;
 		private int[] _givenCoins;
+		private int _countUncompleteCountries;
 
 		public int[] Coins
 		{
@@ -19,12 +20,17 @@ namespace euro
 		{
 			get { return _givenCoins; }
 		}
+		public bool IsComplete
+		{
+			get { return (_countUncompleteCountries == 0); }
+		}
 
 		public City(int countryIndex, int numberOfCountry)
 		{
 			_coins = new int[numberOfCountry];
 			_givenCoins = new int[numberOfCountry];
 			_numberOfCountry = numberOfCountry;
+			_countUncompleteCountries = _numberOfCountry - 1;
 
 			for (int i = 0; i < _numberOfCountry; i++)
 			{
@@ -40,7 +46,7 @@ namespace euro
 			for (int i = 0; i < _numberOfCountry; i++)
 			{
 				if (_coins[i] > 0)
-					_givenCoins[i] = (int)(_coins[i] * _portionCoins); // !!!!! НОРМ?
+					_givenCoins[i] = (int)(_coins[i] * _portionCoins);
 			}
 
 		}
@@ -49,19 +55,12 @@ namespace euro
 		{
 			for (int i = 0; i < _numberOfCountry; i++)
 			{
-				_coins[i] -= _coins[i] - _givenCoins[i]; // вычитаю монеты, отданые монеты
+				int startDayCoins = _coins[i];
+				_coins[i] -= _givenCoins[i]; // вычитаю отданные монеты
 				_coins[i] += takenCoins[i]; // получаю монеты
+				if (startDayCoins == 0 && takenCoins[i] > 0)
+					_countUncompleteCountries -= 1;
 			}
-		}
-
-		public bool isComplete() // проверяю есть ли монеты каждой страны
-		{
-			for (int i = 0; i < _numberOfCountry; i++)
-			{
-				if (_coins[i] == 0)
-					return false;
-			}
-			return true;
 		}
 	}
 }

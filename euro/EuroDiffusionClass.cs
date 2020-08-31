@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 namespace euro
@@ -15,33 +16,46 @@ namespace euro
 
 		public EuroDiffusionClass(string address)
 	    {
-            using (StreamReader sr = new StreamReader(address, System.Text.Encoding.Default))
-            {
-				Console.WriteLine("");
-				Console.WriteLine("");
-				Console.WriteLine("");
-				Console.WriteLine("start programm -----------------");
-				string line;
-                while ((line = sr.ReadLine()) != null)
-                {
-					_numberOfCountry = 0;
-					int.TryParse(line, out _numberOfCountry);
-                    if (_numberOfCountry == 0)
-                        break;
+			try
+			{
+				using (StreamReader sr = new StreamReader(address, System.Text.Encoding.Default))
+				{
+					Console.WriteLine("");
+					Console.WriteLine("");
+					Console.WriteLine("");
+					Console.WriteLine("start programm -----------------");
+					string line;
+					while ((line = sr.ReadLine()) != null)
+					{
+						_numberOfCountry = 0;
+						bool isCanParse = int.TryParse(line, out _numberOfCountry);
+						if (!isCanParse)
+						{
+							Console.WriteLine("Неверные данные");
+							break;
+						}
+						if (_numberOfCountry == 0)
+							break;
 
-					_countries = new InitializeCountryClass[_numberOfCountry]; 
-					_countriesNames = new string[_numberOfCountry]; 
-					_countriesDays = new int[_numberOfCountry]; 
-					_XMaxCoordinate = 0; // для определения размерности массива городов (AbstractCity[,] AllCity)
-					_YMaxCoordinate = 0; // 
+						_countries = new InitializeCountryClass[_numberOfCountry];
+						_countriesNames = new string[_numberOfCountry];
+						_countriesDays = new int[_numberOfCountry];
+						_XMaxCoordinate = 0; // для определения размерности массива городов (AbstractCity[,] AllCity)
+						_YMaxCoordinate = 0; // 
 
-					initializeCountries(line, sr); // Заполняю страны из файла
-					if (_numberOfCountry > 1) // если всего одна страна, то она заполняется за 0 дней
-						daysComput();
-					writeOutput();
-					_caseNumber++;
-                }
-            }
+						initializeCountries(sr); // Заполняю страны из файла
+						if (_numberOfCountry > 1) // если всего одна страна, то она заполняется за 0 дней
+							daysComput();
+						writeOutput();
+						_caseNumber++;
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
+            
         }
 
 
@@ -57,7 +71,7 @@ namespace euro
         {
             string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             int[] coordinates = new int[4];
-			int.TryParse(words[1], out coordinates[0]);
+			int.TryParse(words[1], out coordinates[0]); // !!! ЦИКЛ
 			int.TryParse(words[2], out coordinates[1]);
 			int.TryParse(words[3], out coordinates[2]);
 			int.TryParse(words[4], out coordinates[3]);
@@ -77,11 +91,11 @@ namespace euro
 		}
 
 
-		private void initializeCountries(string line, StreamReader sr)
+		private void initializeCountries(StreamReader sr)
 		{
 			for (int i = 0; i < _numberOfCountry; i++)
 			{
-				line = sr.ReadLine();
+				string line = sr.ReadLine();
 				string country = returnCountry(line);
 				int[] coordinates = returnCoordinates(line);
 				_countries[i] = new InitializeCountryClass(country, x1: coordinates[0], y1: coordinates[1], x2: coordinates[2], y2: coordinates[3]);
@@ -100,7 +114,9 @@ namespace euro
 		private void daysComput()
 		{
 			/* Заполнение Городами */
-			City[,] AllCity = new City[_XMaxCoordinate + 1, _YMaxCoordinate + 1]; // массив с городами (сколько монет в каждом городе), положение города в массиве = координатам города
+			int xLength = _XMaxCoordinate + 1;
+			int yLength = _YMaxCoordinate + 1;
+			City[,] AllCity = new City[xLength, yLength]; // массив с городами (сколько монет в каждом городе), положение города в массиве = координатам города
 			for (int k = 0; k < _numberOfCountry; k++)
 			{
 				for (int i = 0; i < _countries[k].AllCities.GetLength(0); i++)
@@ -122,21 +138,23 @@ namespace euro
 			{
 				days++;
 
-				for (int i = 1; i < AllCity.GetLength(0); i++) // все показывают какие монеты отдают
+				for (int i = 1; i < xLength; i++) // все показывают какие монеты отдают
 				{
-					for (int j = 1; j < AllCity.GetLength(1); j++)
+					for (int j = 1; j < yLength; j++)
 					{
 						if (AllCity[i, j] != null)
 							AllCity[i, j].giveCoins();
 					}
 				}
 
-				for (int i = 1; i < AllCity.GetLength(0); i++) // города получают монеты
+				for (int i = 1; i < xLength; i++) // города получают монеты
 				{
-					for (int j = 1; j < AllCity.GetLength(1); j++)
+					for (int j = 1; j < yLength; j++)
 					{
 						if (AllCity[i, j] != null)
 						{
+							//int[] coordinates = new int[4] {i-1, i+1, j-1, j+1 };
+							//var coord = new { new KeyValuePair<int, int>(i - 1, j) };
 							if (i - 1 >= 1) // меньше единицы нет координат
 							{
 								if (AllCity[i - 1, j] != null)
@@ -177,7 +195,7 @@ namespace euro
 							{
 								int a = _countries[k].AllCities[i, j][0];
 								int b = _countries[k].AllCities[i, j][1];
-								if (AllCity[a, b].isComplete() == false) // если город не закончен
+								if (AllCity[a, b].IsComplete == false) // если город не закончен
 								{
 									_countriesDays[k] = 0;
 									isCanCheck = false;
