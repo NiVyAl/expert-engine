@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 namespace euro
 {
@@ -70,24 +71,37 @@ namespace euro
 
         private int[] returnCoordinates(string line)
         {
-            string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            int[] coordinates = new int[4];
-			int.TryParse(words[1], out coordinates[0]); // !!! ЦИКЛ
-			int.TryParse(words[2], out coordinates[1]);
-			int.TryParse(words[3], out coordinates[2]);
-			int.TryParse(words[4], out coordinates[3]);
+			int coordinatesCount = 4;
+			string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            int[] coordinates = new int[coordinatesCount];
+			for (int i = 1; i <= coordinatesCount; i++)
+			{
+				int.TryParse(words[i], out coordinates[i-1]);
+			}
 
             return coordinates;
-
         }
 
 
 		private void writeOutput()
 		{
 			Console.WriteLine($"Case Number {_caseNumber}");
+
+			CityDays[] cities = new CityDays[_numberOfCountry];
 			for (int i = 0; i < _numberOfCountry; i++)
 			{
-				Console.WriteLine($"	{_countriesNames[i]}: {_countriesDays[i]}");
+				cities[i] = new CityDays { Name = _countriesNames[i], Days = _countriesDays[i] };
+			}
+
+			var q =
+				from t in cities 
+				orderby t 
+				select t;
+
+			var result = q.ToList();
+			foreach (CityDays i in result)
+			{
+				Console.WriteLine($"	{i.Name}: {i.Days}");
 			}
 		}
 
