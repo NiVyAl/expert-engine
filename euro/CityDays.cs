@@ -17,7 +17,7 @@ namespace euro
             if (otherCityDays == null)
                 throw new ArgumentException("Object is not a Temperature");
 
-            res = this.Days.CompareTo(otherCityDays.Days);
+            res = this.Days.CompareTo(otherCityDays.Days);  // сортировка по количеству дней
 
             if (res == 0)
                 res = this.Name.CompareTo(otherCityDays.Name);
