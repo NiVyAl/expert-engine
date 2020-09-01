@@ -2,7 +2,7 @@ using System;
 namespace euro
 {
 
-	public class InitializeCountryClass // класс для высчитывания координат каждой страны
+	public class InitializeCountryClass // class for calculating the coordinates of each city in cointries
 	{
 		private int x1, x2, y1, y2;
 		private int xLength, yLength, cityCount;
@@ -34,7 +34,7 @@ namespace euro
 			allCities = computAllCities();
 		}
 
-		public int[,][] computAllCities() // возвращает координаты всех городов
+		public int[,][] computAllCities() // return coordinates of all cities in country
 		{
 			int[,][] a = new int[xLength, yLength] [];
 			for (int i = 0; i < xLength; i++)
