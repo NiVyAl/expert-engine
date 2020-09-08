@@ -6,7 +6,7 @@ namespace euro
     {
 		static void Main(string[] args)
 		{
-			EuroDiffusionClass fileText = new EuroDiffusionClass(@"input/input.in");
+			EuroDiffusion fileText = new EuroDiffusion(@"input/input.in");
 		}
 	}
 }

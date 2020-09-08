@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace euro
 {
-	public class EuroDiffusionClass
+	public class EuroDiffusion
 	{
-		private InitializeCountryClass[] _countries; // coordinates of all cities of each country
+		private InitializeCountry[] _countries; // coordinates of all cities of each country
 		private int _numberOfCountry; // number of countries in each case
 		private string[] _countriesNames; // array of names of all countries
 		private int[] _countriesDays; // number of days to complete each country
@@ -15,7 +15,7 @@ namespace euro
 		private int _YMaxCoordinate;
 		private int _caseNumber = 1;
 
-		public EuroDiffusionClass(string address)
+		public EuroDiffusion(string address)
 	    {
 			try
 			{
@@ -32,13 +32,13 @@ namespace euro
 						bool isCanParse = int.TryParse(line, out _numberOfCountry);
 						if (!isCanParse)
 						{
-							Console.WriteLine("Неверные данные");
+							Console.WriteLine("Can't parse number of country");
 							break;
 						}
 						if (_numberOfCountry == 0)
 							break;
 
-						_countries = new InitializeCountryClass[_numberOfCountry];
+						_countries = new InitializeCountry[_numberOfCountry];
 						_countriesNames = new string[_numberOfCountry];
 						_countriesDays = new int[_numberOfCountry];
 						_XMaxCoordinate = 0; // to determine the dimension of the array of cities (AbstractCity[,] AllCity)
@@ -76,7 +76,11 @@ namespace euro
             int[] coordinates = new int[coordinatesCount];
 			for (int i = 1; i <= coordinatesCount; i++)
 			{
-				int.TryParse(words[i], out coordinates[i-1]);
+				if (int.TryParse(words[i], out coordinates[i - 1]) == false)
+				{
+					Console.WriteLine("Can't parse coordinates");
+					// !!!!!!!добавить завершение программы!!!!!!!!!!!!!
+				}
 			}
 
             return coordinates;
@@ -113,7 +117,7 @@ namespace euro
 				string line = sr.ReadLine();
 				string country = returnCountry(line);
 				int[] coordinates = returnCoordinates(line);
-				_countries[i] = new InitializeCountryClass(country, x1: coordinates[0], y1: coordinates[1], x2: coordinates[2], y2: coordinates[3]);
+				_countries[i] = new InitializeCountry(country, x1: coordinates[0], y1: coordinates[1], x2: coordinates[2], y2: coordinates[3]);
 				_countriesNames[i] = country;
 
 				if (coordinates[2] > _XMaxCoordinate)

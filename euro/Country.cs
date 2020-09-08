@@ -1,25 +1,23 @@
 using System;
 namespace euro
 {
-
-	public class InitializeCountryClass // class for calculating the coordinates of each city in cointries
+	public class Country
 	{
 		private int x1, x2, y1, y2;
 		private int xLength, yLength, cityCount;
-
 		private int[,][] allCities;
-		public  int[,][] AllCities
-		{
-			get { return allCities; }
-		}
-
 		private string countryName;
-		public  string CountryName
-		{
-			get { return countryName; }
-		}
+		//public int[,][] AllCities
+		//{
+		//	get { return allCities; }
+		//}
 
-		public InitializeCountryClass(string countryName, int x1, int y1, int x2, int y2)
+		//public string CountryName
+		//{
+		//	get { return countryName; }
+		//}
+
+		public Country(string countryName, int x1, int y1, int x2, int y2)
 		{
 			this.countryName = countryName;
 			this.x1 = x1;
@@ -36,7 +34,7 @@ namespace euro
 
 		public int[,][] computAllCities() // return coordinates of all cities in country
 		{
-			int[,][] a = new int[xLength, yLength] [];
+			int[,][] a = new int[xLength, yLength][];
 			for (int i = 0; i < xLength; i++)
 			{
 				for (int j = 0; j < yLength; j++)
