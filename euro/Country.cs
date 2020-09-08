@@ -7,12 +7,6 @@ namespace euro
 		private int x1, x2, y1, y2;
 		private int xLength, yLength, cityCount;
 
-		//private int[,][] allCities;
-
-		//public int[,][] AllCities
-		//{
-		//	get { return allCities; }
-		//}
 		private int[] xCoordinates;
 		private int[] yCoordinates;
 
@@ -39,7 +33,6 @@ namespace euro
 			yLength = Math.Abs(y2 - y1) + 1;
 			cityCount = xLength * yLength;
 
-			//allCities = computAllCities();
 			xCoordinates = new int[cityCount];
 			yCoordinates = new int[cityCount];
 
@@ -55,21 +48,6 @@ namespace euro
 			}
 
 		}
-
-		//public int[,][] computAllCities() // return coordinates of all cities in country
-		//{
-		//	int[,][] a = new int[xLength, yLength][];
-		//	for (int i = 0; i < xLength; i++)
-		//	{
-		//		for (int j = 0; j < yLength; j++)
-		//		{
-		//			a[i, j] = new int[2];
-		//			a[i, j][0] = x1 + i; // x
-		//			a[i, j][1] = y1 + j; // y
-		//		}
-		//	}
-		//	return a;
-		//}
 
 		public int CompareTo(object obj)
 		{

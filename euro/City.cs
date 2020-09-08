@@ -40,8 +40,10 @@ namespace euro
 			_coins[countryIndex] = _initiallyCountCoins;
 		}
 
-
-		public void giveCoins() // called when a new day comes, the City through the GivenCoins interface shows which coins are given
+		/// <summary>
+		///		called when a new day comes, the City through the GivenCoins interface shows which coins are given
+		/// </summary>
+		public void giveCoins()
 		{
 			for (int i = 0; i < _numberOfCountry; i++)
 			{
@@ -51,7 +53,11 @@ namespace euro
 
 		}
 
-		public void takeCoins(int[] takenCoins) // city take coins
+		/// <summary>
+		///		city take coins
+		/// </summary>
+		/// <param name="takenCoins"></param>
+		public void takeCoins(int[] takenCoins) 
 		{
 			for (int i = 0; i < _numberOfCountry; i++)
 			{

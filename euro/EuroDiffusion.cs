@@ -12,6 +12,7 @@ namespace euro
 		private int _XMaxCoordinate; 
 		private int _YMaxCoordinate;
 		private int _caseNumber = 1;
+		private City[,] _allCity;
 
 		public EuroDiffusion(string address)
 	    {
@@ -37,7 +38,7 @@ namespace euro
 							break;
 
 						_countries = new Country[_numberOfCountry];
-						_XMaxCoordinate = 0; // to determine the dimension of the array of cities (AbstractCity[,] AllCity)
+						_XMaxCoordinate = 0; // to determine the dimension of the array of cities (AbstractCity[,] _allCity)
 						_YMaxCoordinate = 0; //
 
 						initializeCountries(sr); // comput coordinates of cities of each country
@@ -57,14 +58,22 @@ namespace euro
         }
 
 
-
+		/// <summary>
+		///		return country name from file
+		/// </summary>
+		/// <param name="line"></param>
+		/// <returns></returns>
         private string returnCountry(string line)
 		{
             string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             return words[0];
         }
 
-
+		/// <summary>
+		///		return coordinates of country from file
+		/// </summary>
+		/// <param name="line"></param>
+		/// <returns></returns>
         private int[] returnCoordinates(string line)
         {
 			int coordinatesCount = 4;
@@ -74,15 +83,16 @@ namespace euro
 			{
 				if (int.TryParse(words[i], out coordinates[i - 1]) == false)
 				{
-					Console.WriteLine("Can't parse coordinates");
-					// !!!!!!!добавить завершение программы!!!!!!!!!!!!!
+					throw new Exception("Can't parse coordinates");
 				}
 			}
 
             return coordinates;
         }
 
-
+		/// <summary>
+		///		write output in console
+		/// </summary>
 		private void writeOutput()
 		{
 			Console.WriteLine($"Case Number {_caseNumber}");
@@ -99,7 +109,10 @@ namespace euro
 			}
 		}
 
-
+		/// <summary>
+		///		initialize each countries
+		/// </summary>
+		/// <param name="sr"></param>
 		private void initializeCountries(StreamReader sr)
 		{
 			for (int i = 0; i < _numberOfCountry; i++)
@@ -113,40 +126,41 @@ namespace euro
 					_XMaxCoordinate = coordinates[2];
 				if (coordinates[3] > _YMaxCoordinate)
 					_YMaxCoordinate = coordinates[3];
-
-				//_countriesDays[i] = 0; // number of days to fill each country initially = 0
 			}
 		}
 
-
+		/// <summary>
+		///		Comput days for complete each country
+		/// </summary>
 		private void daysComput()
 		{
 			/* Initialization of each city */
 			int xLength = _XMaxCoordinate + 1;
 			int yLength = _YMaxCoordinate + 1;
-			City[,] AllCity = new City[xLength, yLength]; // an array of instances of the City class is created for each city, the position of the city in the array = the coordinates of the city
+			_allCity = new City[xLength, yLength]; // an array of instances of the City class is created for each city, the position of the city in the array = the coordinates of the city
 			for (int k = 0; k < _numberOfCountry; k++)
 			{
 				for (int i = 0; i < _countries[k].XCoordinates.GetLength(0); i++)
 				{
 					int x = _countries[k].XCoordinates[i];
 					int y = _countries[k].YCoordinates[i];
-					AllCity[x, y] = new City(countryIndex: k, _numberOfCountry);
+					_allCity[x, y] = new City(countryIndex: k, _numberOfCountry);
 				}
 			}
 			/* */
 
 			/* cycle of passing days */
 			int days = 0;
-			while (days >= 0)
+			int numberUncompleteCountries = _numberOfCountry;
+			while (numberUncompleteCountries > 0)
 			{
 				days++;
 				for (int i = 1; i < xLength; i++) // comput a portion of coins for transported to each neighbor of the city
 				{
 					for (int j = 1; j < yLength; j++)
 					{
-						if (AllCity[i, j] != null)
-							AllCity[i, j].giveCoins();
+						if (_allCity[i, j] != null)
+							_allCity[i, j].giveCoins();
 					}
 				}
 
@@ -154,98 +168,60 @@ namespace euro
 				{
 					for (int j = 1; j < yLength; j++)
 					{
-						if (AllCity[i, j] != null)
+						if (_allCity[i, j] != null)
 						{
 							if (i - 1 >= 1) // checking for the have a neighboring city to the left
 							{
-								if (AllCity[i - 1, j] != null)
-									AllCity[i, j].takeCoins(AllCity[i - 1, j].GivenCoins);
+								takeCoins(i, j, -1, 0);
 							}
 
 							if (j - 1 >= 1) // checking for the have a neighboring city to the bottom
 							{
-								if (AllCity[i, j - 1] != null)
-									AllCity[i, j].takeCoins(AllCity[i, j - 1].GivenCoins);
+								takeCoins(i, j, 0, -1);
 							}
 
-							if (i + 1 < AllCity.GetLength(0)) // checking for the have a neighboring city to the right
+							if (i + 1 < _allCity.GetLength(0)) // checking for the have a neighboring city to the right
 							{
-								if (AllCity[i + 1, j] != null)
-									AllCity[i, j].takeCoins(AllCity[i + 1, j].GivenCoins);
+								takeCoins(i, j, +1, 0);
 							}
 
-							if (j + 1 < AllCity.GetLength(1)) // checking for the have a neighboring city to the top
+							if (j + 1 < _allCity.GetLength(1)) // checking for the have a neighboring city to the top
 							{
-								if (AllCity[i, j + 1] != null)
-									AllCity[i, j].takeCoins(AllCity[i, j + 1].GivenCoins);
+								takeCoins(i, j, 0, +1);
 							}
 						}
 					}
 				}
-
 
 				/* check for completion of each country */
 				for (int k = 0; k < _numberOfCountry; k++)
 				{
 					if (_countries[k].Days == 0)
 					{
-						//bool isCanCheck = true;
 						for (int i = 0; i < _countries[k].XCoordinates.GetLength(0); i++)
 						{
 							int x = _countries[k].XCoordinates[i];
 							int y = _countries[k].YCoordinates[i];
-							//Console.WriteLine($"{x}, {y}, {days}");
-							if (AllCity[x, y].IsComplete == false) // if city isn't complete
+							if (_allCity[x, y].IsComplete == false) // if city isn't complete
 							{
 								_countries[k].Days = 0;
-								//isCanCheck = false;
 								break;
 							}
 							else
-							{
 								_countries[k].Days = days;
-							}
 						}
-
-						//for (int i = 0; i < _countries[k].AllCities.GetLength(0) && isCanCheck; i++)
-						//{
-						//	for (int j = 0; j < _countries[k].AllCities.GetLength(1); j++)
-						//	{
-						//		int a = _countries[k].AllCities[i, j][0];
-						//		int b = _countries[k].AllCities[i, j][1];
-						//		if (AllCity[a, b].IsComplete == false) // if city isn't complete
-						//		{
-						//			_countries[k].Days = 0;
-						//			isCanCheck = false;
-						//			break;
-						//		}
-						//		else
-						//		{
-						//			_countries[k].Days = days;
-						//		}
-						//	}
-						//}
+						if (_countries[k].Days > 0)
+							numberUncompleteCountries--;
 					}
 				}
-				/* */
-
-				/* check for completion of all countries */
-				bool isComplete = false;
-				for (int i = 0; i < _numberOfCountry; i++)
-				{
-					if (_countries[i].Days == 0)
-					{
-						isComplete = false;
-						break;
-					} else
-					{
-						isComplete = true;
-					}
-				}
-				if (isComplete == true)
-					break;
 				/* */
 			}
+		}
+
+		private void takeCoins(int x, int y, int neighborIndexX, int neighborIndexY)
+		{
+			if (_allCity[x + neighborIndexX, y + neighborIndexY] != null)
+				_allCity[x, y].takeCoins(_allCity[x + neighborIndexX, y + neighborIndexY].GivenCoins);
 		}
 	}
 }
