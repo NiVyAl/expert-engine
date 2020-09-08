@@ -7,10 +7,11 @@ namespace euro
 {
 	public class EuroDiffusion
 	{
-		private InitializeCountry[] _countries; // coordinates of all cities of each country
+		//private InitializeCountry[] _countries; // coordinates of all cities of each country
 		private int _numberOfCountry; // number of countries in each case
-		private string[] _countriesNames; // array of names of all countries
-		private int[] _countriesDays; // number of days to complete each country
+		//private string[] _countriesNames; // array of names of all countries
+		//private int[] _countriesDays; // number of days to complete each country
+		private Country[] _countries;
 		private int _XMaxCoordinate; 
 		private int _YMaxCoordinate;
 		private int _caseNumber = 1;
@@ -38,9 +39,9 @@ namespace euro
 						if (_numberOfCountry == 0)
 							break;
 
-						_countries = new InitializeCountry[_numberOfCountry];
-						_countriesNames = new string[_numberOfCountry];
-						_countriesDays = new int[_numberOfCountry];
+						_countries = new Country[_numberOfCountry];
+						//_countriesNames = new string[_numberOfCountry];
+						//_countriesDays = new int[_numberOfCountry];
 						_XMaxCoordinate = 0; // to determine the dimension of the array of cities (AbstractCity[,] AllCity)
 						_YMaxCoordinate = 0; //
 
@@ -91,21 +92,21 @@ namespace euro
 		{
 			Console.WriteLine($"Case Number {_caseNumber}");
 
-			CountriesDays[] cities = new CountriesDays[_numberOfCountry];
-			for (int i = 0; i < _numberOfCountry; i++)
-			{
-				cities[i] = new CountriesDays { Name = _countriesNames[i], Days = _countriesDays[i] };
-			}
+			//CountriesDays[] cities = new CountriesDays[_numberOfCountry];
+			//for (int i = 0; i < _numberOfCountry; i++)
+			//{
+			//	cities[i] = new CountriesDays { Name = _countriesNames[i], Days = _countriesDays[i] };
+			//}
 
 			var q =
-				from t in cities 
+				from t in _countries 
 				orderby t 
 				select t;
 
 			var result = q.ToList();
-			foreach (CountriesDays i in result)
+			foreach (Country i in result)
 			{
-				Console.WriteLine($"	{i.Name}: {i.Days}");
+				Console.WriteLine($"	{i.CountryName}: {i.Days}");
 			}
 		}
 
@@ -117,15 +118,14 @@ namespace euro
 				string line = sr.ReadLine();
 				string country = returnCountry(line);
 				int[] coordinates = returnCoordinates(line);
-				_countries[i] = new InitializeCountry(country, x1: coordinates[0], y1: coordinates[1], x2: coordinates[2], y2: coordinates[3]);
-				_countriesNames[i] = country;
+				_countries[i] = new Country(country, x1: coordinates[0], y1: coordinates[1], x2: coordinates[2], y2: coordinates[3]);
 
 				if (coordinates[2] > _XMaxCoordinate)
 					_XMaxCoordinate = coordinates[2];
 				if (coordinates[3] > _YMaxCoordinate)
 					_YMaxCoordinate = coordinates[3];
 
-				_countriesDays[i] = 0; // number of days to fill each country initially = 0
+				//_countriesDays[i] = 0; // number of days to fill each country initially = 0
 			}
 		}
 
@@ -184,13 +184,13 @@ namespace euro
 									AllCity[i, j].takeCoins(AllCity[i, j - 1].GivenCoins);
 							}
 
-							if (AllCity.GetLength(0) > i + 1) // checking for the have a neighboring city to the right
+							if (i + 1 < AllCity.GetLength(0)) // checking for the have a neighboring city to the right
 							{
 								if (AllCity[i + 1, j] != null)
 									AllCity[i, j].takeCoins(AllCity[i + 1, j].GivenCoins);
 							}
 
-							if (AllCity.GetLength(1) > j + 1) // checking for the have a neighboring city to the top
+							if (j + 1 < AllCity.GetLength(1)) // checking for the have a neighboring city to the top
 							{
 								if (AllCity[i, j + 1] != null)
 									AllCity[i, j].takeCoins(AllCity[i, j + 1].GivenCoins);
@@ -203,7 +203,7 @@ namespace euro
 				/* check for completion of each country */
 				for (int k = 0; k < _numberOfCountry; k++)
 				{
-					if (_countriesDays[k] == 0)
+					if (_countries[k].Days == 0)
 					{
 						bool isCanCheck = true;
 						for (int i = 0; i < _countries[k].AllCities.GetLength(0) && isCanCheck; i++)
@@ -214,13 +214,13 @@ namespace euro
 								int b = _countries[k].AllCities[i, j][1];
 								if (AllCity[a, b].IsComplete == false) // if city isn't complete
 								{
-									_countriesDays[k] = 0;
+									_countries[k].Days = 0;
 									isCanCheck = false;
 									break;
 								}
 								else
 								{
-									_countriesDays[k] = days;
+									_countries[k].Days = days;
 								}
 							}
 						}
@@ -231,7 +231,7 @@ namespace euro
 				/* check for completion of all countries */
 				for (int i = 0; i < _numberOfCountry; i++)
 				{
-					if (_countriesDays[i] == 0)
+					if (_countries[i].Days == 0)
 					{
 						isComplete = false;
 						break;
