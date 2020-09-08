@@ -170,28 +170,21 @@ namespace euro
 					{
 						if (_allCity[i, j] != null)
 						{
-							if (i - 1 >= 1) // checking for the have a neighboring city to the left
+							int[,] neighbors = new int[4, 2]
 							{
-								takeCoins(i, j, -1, 0);
-							}
-
-							if (j - 1 >= 1) // checking for the have a neighboring city to the bottom
+								{ i - 1, j },
+								{ i + 1, j},
+								{ i, j+1 },
+								{ i, j -1 }
+							};
+							for (int l = 0; l < 4; l++) // cities get coins
 							{
-								takeCoins(i, j, 0, -1);
-							}
-
-							if (i + 1 < _allCity.GetLength(0)) // checking for the have a neighboring city to the right
-							{
-								takeCoins(i, j, +1, 0);
-							}
-
-							if (j + 1 < _allCity.GetLength(1)) // checking for the have a neighboring city to the top
-							{
-								takeCoins(i, j, 0, +1);
+								takeCoins(i, j, neighbors[l, 0], neighbors[l, 1]);
 							}
 						}
 					}
 				}
+
 
 				/* check for completion of each country */
 				for (int k = 0; k < _numberOfCountry; k++)
@@ -220,8 +213,10 @@ namespace euro
 
 		private void takeCoins(int x, int y, int neighborIndexX, int neighborIndexY)
 		{
-			if (_allCity[x + neighborIndexX, y + neighborIndexY] != null)
-				_allCity[x, y].takeCoins(_allCity[x + neighborIndexX, y + neighborIndexY].GivenCoins);
+			if ((neighborIndexX >= 1 && neighborIndexY >= 1 && neighborIndexX < _allCity.GetLength(0) && neighborIndexY < _allCity.GetLength(1)) == false)
+				return;
+			if (_allCity[neighborIndexX, neighborIndexY] != null)
+				_allCity[x, y].takeCoins(_allCity[neighborIndexX, neighborIndexY].GivenCoins);
 		}
 	}
 }
