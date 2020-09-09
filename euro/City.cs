@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 namespace euro
 {
-	public class City // class for each city
+	/// <summary>
+	///		class for each city
+	/// </summary>
+	public class City
 	{
 		private const int _initiallyCountCoins = 1000000;
 		private const double _portionCoins = 0.001;

@@ -7,7 +7,7 @@ namespace euro
 {
 	public class EuroDiffusion
 	{
-		private int _numberOfCountry; // number of countries in each casey
+		private int _numberOfCountry; // number of countries in each case
 		private Country[] _countries;
 		private int _XMaxCoordinate; 
 		private int _YMaxCoordinate;
@@ -140,10 +140,10 @@ namespace euro
 			_allCity = new City[xLength, yLength]; // an array of instances of the City class is created for each city, the position of the city in the array = the coordinates of the city
 			for (int k = 0; k < _numberOfCountry; k++)
 			{
-				for (int i = 0; i < _countries[k].XCoordinates.GetLength(0); i++)
+				for (int i = 0; i < _countries[k].Coordinates.GetLength(0); i++)
 				{
-					int x = _countries[k].XCoordinates[i];
-					int y = _countries[k].YCoordinates[i];
+					int x = _countries[k].Coordinates[i].X;
+					int y = _countries[k].Coordinates[i].Y;
 					_allCity[x, y] = new City(countryIndex: k, _numberOfCountry);
 				}
 			}
@@ -191,10 +191,10 @@ namespace euro
 				{
 					if (_countries[k].Days == 0)
 					{
-						for (int i = 0; i < _countries[k].XCoordinates.GetLength(0); i++)
+						for (int i = 0; i < _countries[k].Coordinates.GetLength(0); i++)
 						{
-							int x = _countries[k].XCoordinates[i];
-							int y = _countries[k].YCoordinates[i];
+							int x = _countries[k].Coordinates[i].X;
+							int y = _countries[k].Coordinates[i].Y;
 							if (_allCity[x, y].IsComplete == false) // if city isn't complete
 							{
 								_countries[k].Days = 0;
