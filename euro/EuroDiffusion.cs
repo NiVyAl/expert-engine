@@ -155,7 +155,8 @@ namespace euro
 			while (numberUncompleteCountries > 0)
 			{
 				days++;
-				for (int i = 1; i < xLength; i++) // comput a portion of coins for transported to each neighbor of the city
+				/* comput a portion of coins for transported to each neighbor of the city */
+				for (int i = 1; i < xLength; i++)
 				{
 					for (int j = 1; j < yLength; j++)
 					{
@@ -164,7 +165,8 @@ namespace euro
 					}
 				}
 
-				for (int i = 1; i < xLength; i++) // cities get coins
+				/* cities get coins */
+				for (int i = 1; i < xLength; i++)
 				{
 					for (int j = 1; j < yLength; j++)
 					{
@@ -172,12 +174,12 @@ namespace euro
 						{
 							int[,] neighbors = new int[4, 2]
 							{
-								{ i - 1, j },
-								{ i + 1, j},
-								{ i, j+1 },
-								{ i, j -1 }
+								{ i - 1, j }, // left neighbor
+								{ i + 1, j }, // right neighbor
+								{ i, j + 1 }, // top neighbor
+								{ i, j - 1 }  // bottom neighbor
 							};
-							for (int l = 0; l < 4; l++) // cities get coins
+							for (int l = 0; l < 4; l++) // city get coins from neighbors
 							{
 								takeCoins(i, j, neighbors[l, 0], neighbors[l, 1]);
 							}
@@ -211,11 +213,18 @@ namespace euro
 			}
 		}
 
+		/// <summary>
+		///		city get coins from neighbor
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="neighborIndexX"></param>
+		/// <param name="neighborIndexY"></param>
 		private void takeCoins(int x, int y, int neighborIndexX, int neighborIndexY)
 		{
-			if ((neighborIndexX >= 1 && neighborIndexY >= 1 && neighborIndexX < _allCity.GetLength(0) && neighborIndexY < _allCity.GetLength(1)) == false)
+			if ((neighborIndexX >= 1 && neighborIndexY >= 1 && neighborIndexX < _allCity.GetLength(0) && neighborIndexY < _allCity.GetLength(1)) == false) // checking the correctness of coordinates 
 				return;
-			if (_allCity[neighborIndexX, neighborIndexY] != null)
+			if (_allCity[neighborIndexX, neighborIndexY] != null) // check availability of neighbor
 				_allCity[x, y].takeCoins(_allCity[neighborIndexX, neighborIndexY].GivenCoins);
 		}
 	}

@@ -7,13 +7,15 @@ namespace euro
 	/// </summary>
 	public class Country : IComparable
 	{
-		private int x1, x2, y1, y2;
-		private int xLength, yLength, cityCount;
+		private int _xLength, _yLength, _cityCount;
+		private Coordinate[] _coordinates;
 
-		private Coordinate[] coordinates;
+		/// <summary>
+		///		store coordinates of all cities in country
+		/// </summary>
 		public Coordinate[] Coordinates
 		{
-			get { return coordinates; }
+			get { return _coordinates; }
 		}
 
 		public string CountryName { get; set; }
@@ -22,24 +24,20 @@ namespace euro
 		public Country(string countryName, int x1, int y1, int x2, int y2)
 		{
 			this.CountryName = countryName;
-			this.x1 = x1;
-			this.x2 = x2;
-			this.y1 = y1;
-			this.y2 = y2;
 
-			xLength = Math.Abs(x2 - x1) + 1;
-			yLength = Math.Abs(y2 - y1) + 1;
-			cityCount = xLength * yLength;
-			coordinates = new Coordinate[cityCount];
+			_xLength = Math.Abs(x2 - x1) + 1;
+			_yLength = Math.Abs(y2 - y1) + 1;
+			_cityCount = _xLength * _yLength;
+			_coordinates = new Coordinate[_cityCount];
 
 			int coordinateIndex = 0;
-			for (int i = 0; i < xLength; i++)
+			for (int i = 0; i < _xLength; i++)
 			{
-				for (int j = 0; j < yLength; j++)
+				for (int j = 0; j < _yLength; j++)
 				{
-					coordinates[coordinateIndex] = new Coordinate();
-					coordinates[coordinateIndex].X = x1 + i;
-					coordinates[coordinateIndex].Y = y1 + j;
+					_coordinates[coordinateIndex] = new Coordinate();
+					_coordinates[coordinateIndex].X = x1 + i;
+					_coordinates[coordinateIndex].Y = y1 + j;
 					coordinateIndex++;
 				}
 			}
