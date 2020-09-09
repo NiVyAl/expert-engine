@@ -152,11 +152,10 @@ namespace euro
 			/* */
 
 			/* cycle of passing days */
-			int days = 0;
+			int days = 1;
 			int numberUncompleteCountries = _numberOfCountry;
 			while (numberUncompleteCountries > 0)
 			{
-				days++;
 				/* comput a portion of coins for transported to each neighbor of the city */
 				for (int i = 1; i < xLength; i++)
 				{
@@ -189,10 +188,10 @@ namespace euro
 					}
 				}
 
-				//if (days == 0)
-				//{
-				//	checkCorrectData();
-				//}
+				if (days == 1) // at the first day, check data correct
+				{
+					checkCorrectData();
+				}
 				/* check for completion of each country */
 				for (int k = 0; k < _numberOfCountry; k++)
 				{
@@ -214,6 +213,7 @@ namespace euro
 							numberUncompleteCountries--;
 					}
 				}
+				days++;
 				/* */
 			}
 		}
@@ -234,13 +234,59 @@ namespace euro
 		}
 
 
-		//bool[] numberCheckCountry;
-		//private void checkCorrectData()
-		//{
-		//	numberCheckCountry = new bool[_numberOfCountry];
-		//	numberCheckCountry[0] = true;
-		//	a(0);
-		//}
+		private List<Neighbors> _neighbors = new List<Neighbors>();
+		//private List<int> _neighbors2 = new List<int>();
+		private void checkCorrectData()
+		{
+			for (int k = 0; k < _numberOfCountry; k++)
+			{
+				for (int i = 0; i < _countries[k].Coordinates.GetLength(0); i++)
+				{
+					int x = _countries[k].Coordinates[i].X;
+					int y = _countries[k].Coordinates[i].Y;
+					for (int j = 0; j < _numberOfCountry; j++)
+					{
+						if (_allCity[x, y].NeighborsCountries[j]) // j - index neighbor country
+						{
+							bool isOriginalPare = true;
+							for (int m = 0; m < _neighbors.Count; m++)
+							{
+								if ((_neighbors[m].n1 == j && _neighbors[m].n2 == k) == false)
+								{
+									isOriginalPare = false;
+								} else if ((_neighbors[m].n2 == j && _neighbors[m].n1 == k) == false)
+								{
+									isOriginalPare = false;
+								}
+							}
+							if (isOriginalPare)
+							{
+								Neighbors newPair = new Neighbors();
+								newPair.n1 = j;
+								newPair.n2 = k;
+								Console.WriteLine($"{j}, {k}");
+								_neighbors.Add(newPair);
+							}
+						}
+					}
+				}
+			}
+			int[] correctCountries = new int[_numberOfCountry];
+			correctCountries[0] = _neighbors[0].n1;
+			correctCountries[0 + 1] = _neighbors[0].n2;
+
+			for (int i = 1; i < _neighbors.Count; i++)
+			{
+				if (_neighbors[0].n1 == i)
+				{
+
+				}
+			}
+			//foreach(Neighbors i in _neighbors)
+			//{
+			//	Console.WriteLine($"{i.n1}, {i.n2}");
+			//}
+		}
 
 		//private void a(int countryIndex)
 		//{
