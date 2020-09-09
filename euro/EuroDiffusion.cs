@@ -62,8 +62,8 @@ namespace euro
 		///		return country name from file
 		/// </summary>
 		/// <param name="line"></param>
-		/// <returns></returns>
-        private string returnCountry(string line)
+		/// <returns>country name</returns>
+		private string returnCountry(string line)
 		{
             string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             return words[0];
@@ -73,8 +73,8 @@ namespace euro
 		///		return coordinates of country from file
 		/// </summary>
 		/// <param name="line"></param>
-		/// <returns></returns>
-        private int[] returnCoordinates(string line)
+		/// <returns>int[] coordinates</returns>
+		private int[] returnCoordinates(string line)
         {
 			int coordinatesCount = 4;
 			string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -144,6 +144,8 @@ namespace euro
 				{
 					int x = _countries[k].Coordinates[i].X;
 					int y = _countries[k].Coordinates[i].Y;
+					if (_allCity[x, y] != null)
+						throw new Exception($"Wrong coordinates (country stay at another country), case number: {_caseNumber}, country name: {_countries[k].CountryName}");
 					_allCity[x, y] = new City(countryIndex: k, _numberOfCountry);
 				}
 			}
@@ -187,7 +189,10 @@ namespace euro
 					}
 				}
 
-
+				//if (days == 0)
+				//{
+				//	checkCorrectData();
+				//}
 				/* check for completion of each country */
 				for (int k = 0; k < _numberOfCountry; k++)
 				{
@@ -227,5 +232,31 @@ namespace euro
 			if (_allCity[neighborIndexX, neighborIndexY] != null) // check availability of neighbor
 				_allCity[x, y].takeCoins(_allCity[neighborIndexX, neighborIndexY].GivenCoins);
 		}
+
+
+		//bool[] numberCheckCountry;
+		//private void checkCorrectData()
+		//{
+		//	numberCheckCountry = new bool[_numberOfCountry];
+		//	numberCheckCountry[0] = true;
+		//	a(0);
+		//}
+
+		//private void a(int countryIndex)
+		//{
+		//	for (int i = countryIndex; i < _countries[countryIndex].Coordinates.GetLength(0); i++)
+		//	{
+		//		int x = _countries[countryIndex].Coordinates[i].X;
+		//		int y = _countries[countryIndex].Coordinates[i].Y;
+		//		for (int k = 0; k < _numberOfCountry; k++)
+		//		{
+		//			if (_allCity[x, y].NeighborsCountries[k])
+		//			{
+		//				numberCheckCountry[k] = true;
+		//				a(k);
+		//			}
+		//		}
+		//	}
+		//}
 	}
 }
