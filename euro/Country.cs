@@ -8,12 +8,12 @@ namespace euro
 	public class Country : IComparable
 	{
 		private int _xLength, _yLength, _cityCount;
-		private Coordinate[] _coordinates;
+		private Coordinates[] _coordinates;
 
 		/// <summary>
 		///		store coordinates of all cities in country
 		/// </summary>
-		public Coordinate[] Coordinates
+		public Coordinates[] Coordinates
 		{
 			get { return _coordinates; }
 		}
@@ -28,14 +28,14 @@ namespace euro
 			_xLength = Math.Abs(x2 - x1) + 1;
 			_yLength = Math.Abs(y2 - y1) + 1;
 			_cityCount = _xLength * _yLength;
-			_coordinates = new Coordinate[_cityCount];
+			_coordinates = new Coordinates[_cityCount];
 
 			int coordinateIndex = 0;
 			for (int i = 0; i < _xLength; i++)
 			{
 				for (int j = 0; j < _yLength; j++)
 				{
-					_coordinates[coordinateIndex] = new Coordinate();
+					_coordinates[coordinateIndex] = new Coordinates();
 					_coordinates[coordinateIndex].X = x1 + i;
 					_coordinates[coordinateIndex].Y = y1 + j;
 					coordinateIndex++;

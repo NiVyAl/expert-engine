@@ -152,11 +152,10 @@ namespace euro
 			/* */
 
 			/* cycle of passing days */
-			int days = 0;
+			int days = 1;
 			int numberUncompleteCountries = _numberOfCountry;
 			while (numberUncompleteCountries > 0)
 			{
-				days++;
 				/* comput a portion of coins for transported to each neighbor of the city */
 				for (int i = 1; i < xLength; i++)
 				{
@@ -189,10 +188,10 @@ namespace euro
 					}
 				}
 
-				//if (days == 0)
-				//{
-				//	checkCorrectData();
-				//}
+				if (days == 1)
+				{
+					checkCorrectCoordinates();
+				}
 				/* check for completion of each country */
 				for (int k = 0; k < _numberOfCountry; k++)
 				{
@@ -215,6 +214,7 @@ namespace euro
 					}
 				}
 				/* */
+				days++;
 			}
 		}
 
@@ -233,30 +233,29 @@ namespace euro
 				_allCity[x, y].takeCoins(_allCity[neighborIndexX, neighborIndexY].GivenCoins);
 		}
 
-
-		//bool[] numberCheckCountry;
-		//private void checkCorrectData()
-		//{
-		//	numberCheckCountry = new bool[_numberOfCountry];
-		//	numberCheckCountry[0] = true;
-		//	a(0);
-		//}
-
-		//private void a(int countryIndex)
-		//{
-		//	for (int i = countryIndex; i < _countries[countryIndex].Coordinates.GetLength(0); i++)
-		//	{
-		//		int x = _countries[countryIndex].Coordinates[i].X;
-		//		int y = _countries[countryIndex].Coordinates[i].Y;
-		//		for (int k = 0; k < _numberOfCountry; k++)
-		//		{
-		//			if (_allCity[x, y].NeighborsCountries[k])
-		//			{
-		//				numberCheckCountry[k] = true;
-		//				a(k);
-		//			}
-		//		}
-		//	}
-		//}
+		/// <summary>
+		///		check if each country borders with someone
+		/// </summary>
+		private void checkCorrectCoordinates()
+		{
+			
+			for (int k = 0; k < _numberOfCountry; k++)
+			{
+				bool isBorder = false;
+				for (int i = 0; i < _countries[k].Coordinates.GetLength(0); i++)
+				{
+					int x = _countries[k].Coordinates[i].X;
+					int y = _countries[k].Coordinates[i].Y;
+					if (_allCity[x, y].IsBorder)
+					{
+						isBorder = true;
+					}
+				}
+				if (!isBorder)
+				{
+					throw new Exception($"Country {_countries[k].CountryName} doesn't border with another");
+				}
+			}
+		}
 	}
 }
