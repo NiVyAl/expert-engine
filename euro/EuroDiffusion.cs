@@ -131,49 +131,47 @@ namespace euro
 			}
 
 			/* ищу соседей странам */
-			for (int i = 0; i < _numberOfCountry; i++) // берем страну
+			for (int i = 0; i < _numberOfCountry; i++)
 			{
-				for(int j = 1; j < _numberOfCountry; j++) // ищем ей соседа из всех стран
+				Console.WriteLine($"{ _countries[i].X1} { _countries[i].Y1}");
+				Console.WriteLine($"{_countries[i].X2} {_countries[i].Y2}");
+				Console.WriteLine();
+				for (int j = 0; j < _numberOfCountry; j++) // ищем ей соседа из всех стран
 				{
 					if (_countries[i].Neighbors[j] == true) // если эта страна уже в списке соседей, то прекращаем
 						break;
-					Console.WriteLine(_countries[i].CountryName);
-					Console.WriteLine(_countries[i].X1);
-					Console.WriteLine(_countries[j].X1);
-					Console.WriteLine(_countries[i].X2);
-					Console.WriteLine(_countries[j].X2);
-					Console.WriteLine(_countries[i].X1 <= _countries[j].X1);
-					Console.WriteLine(_countries[i].X2 >= _countries[j].X2);
-					if (_countries[i].X1 <= _countries[j].X1 || _countries[i].X2 >= _countries[j].X2)
+					Console.WriteLine($"{ _countries[j].X1} { _countries[j].Y1}");
+					Console.WriteLine($"{_countries[j].X2} {_countries[j].Y2}");
+
+					Console.WriteLine($"{_countries[i].X1 - 1} == {_countries[j].X2 } || {_countries[i].X2 + 1} == {_countries[j].X1}");
+					if (_countries[i].X1 - 1 == _countries[j].X2 || _countries[i].X2 + 1 == _countries[j].X1) // слева
 					{
-						Console.WriteLine();
-						Console.WriteLine(_countries[i].Y1);
-						Console.WriteLine(_countries[j].Y2+1);
-						Console.WriteLine(_countries[i].Y2+1);
-						Console.WriteLine(_countries[j].Y1);
-						Console.WriteLine(_countries[i].Y1 == _countries[j].Y2 + 1);
-						Console.WriteLine(_countries[i].Y2 + 1 == _countries[j].Y1);
-						if (_countries[i].Y1 == _countries[j].Y2 + 1 || _countries[i].Y2 + 1 == _countries[j].Y1)
+						Console.WriteLine($"{_countries[j].Y1} >= {_countries[i].Y1} && {_countries[j].Y1} <= {_countries[i].Y2} || {_countries[j].Y2} >= {_countries[i].Y1} && {_countries[j].Y2} <= {_countries[i].Y2}");
+						if ((_countries[j].Y1 >= _countries[i].Y1 && _countries[j].Y1 <= _countries[i].Y2) || (_countries[j].Y2 >= _countries[i].Y1 && _countries[j].Y2 <= _countries[i].Y2))
 						{
 							_countries[i].Neighbors[j] = true;
 							_countries[j].Neighbors[i] = true;
-							Console.WriteLine("complete neighbor");
+							Console.WriteLine("true 1");
 						}
 					}
-					else if (_countries[i].Y1 <= _countries[j].Y1 || _countries[i].Y2 >= _countries[j].Y2)
+
+					Console.WriteLine("----");
+
+					Console.WriteLine($"{_countries[i].Y1 - 1} == {_countries[j].Y2 } || {_countries[i].Y2 + 1} == {_countries[j].Y1}");
+					if (_countries[i].Y1 - 1 == _countries[j].Y2 || _countries[i].Y2 + 1 == _countries[j].Y1) // сверху
 					{
-						if (_countries[i].X1 == _countries[j].X2 + 1 || _countries[i].X2 + 1 == _countries[j].X1)
+						Console.WriteLine($"{_countries[j].X1} >= {_countries[i].X1} && {_countries[j].X1} <= {_countries[i].X2} || {_countries[j].X2} >= {_countries[i].X1} && {_countries[j].X2} <= {_countries[i].X2}");
+						if ((_countries[j].X1 >= _countries[i].X1 && _countries[j].X1 <= _countries[i].X2) || (_countries[j].X2 >= _countries[i].X1 && _countries[j].X2 <= _countries[i].X2))
 						{
 							_countries[i].Neighbors[j] = true;
 							_countries[j].Neighbors[i] = true;
-							Console.WriteLine("ELSE complete neighbor");
+							Console.WriteLine("true 2");
 						}
 					}
-					Console.WriteLine();
-					Console.WriteLine();
-					Console.WriteLine();
+					Console.WriteLine("------------------------------");
 				}
 			}
+			Console.WriteLine("Проверка завершена");
 		}
 
 		/// <summary>
