@@ -244,28 +244,44 @@ namespace euro
 			/* define the neighbors of each country */
 			for (int i = 0; i < _numberOfCountry; i++)
 			{
-				for (int j = 0; j < _numberOfCountry; j++) // ищем ей соседа из всех стран
+				for (int j = 0; j < _numberOfCountry; j++)
 				{
-					if (_countries[i].Neighbors[j] == true || i == j) // если эта страна уже в списке соседей или само с собой, то прекращаем 
+					if (_countries[i].Neighbors[j] == true || i == j)
 						continue;
 
-					if (_countries[i].X1 - 1 == _countries[j].X2 || _countries[i].X2 + 1 == _countries[j].X1) // слева
+					for (int m = 0; m < 2; m++)
 					{
-						if ((_countries[j].Y1 >= _countries[i].Y1 && _countries[j].Y1 <= _countries[i].Y2) || (_countries[j].Y2 >= _countries[i].Y1 && _countries[j].Y2 <= _countries[i].Y2))
+						if (_countries[i].GivenCoordinates[m] - 1 == _countries[j].GivenCoordinates[m+2] || _countries[i].GivenCoordinates[m + 2] + 1 == _countries[j].GivenCoordinates[m]) // слева
 						{
-							_countries[i].Neighbors[j] = true;
-							_countries[j].Neighbors[i] = true;
-							continue;
+							int n = m;
+							if (m == 1)
+								n = m - 2;
+							if ((_countries[j].GivenCoordinates[n+1] >= _countries[i].GivenCoordinates[n + 1] && _countries[j].GivenCoordinates[n + 1] <= _countries[i].GivenCoordinates[n + 3]) || (_countries[j].GivenCoordinates[n + 3] >= _countries[i].GivenCoordinates[n + 1] && _countries[j].GivenCoordinates[n + 3] <= _countries[i].GivenCoordinates[n + 3]))
+							{
+								_countries[i].Neighbors[j] = true;
+								_countries[j].Neighbors[i] = true;
+								break;
+							}
 						}
 					}
-					if (_countries[i].Y1 - 1 == _countries[j].Y2 || _countries[i].Y2 + 1 == _countries[j].Y1) // сверху
-					{
-						if ((_countries[j].X1 >= _countries[i].X1 && _countries[j].X1 <= _countries[i].X2) || (_countries[j].X2 >= _countries[i].X1 && _countries[j].X2 <= _countries[i].X2))
-						{
-							_countries[i].Neighbors[j] = true;
-							_countries[j].Neighbors[i] = true;
-						}
-					}
+
+					//if (_countries[i].X1 - 1 == _countries[j].X2 || _countries[i].X2 + 1 == _countries[j].X1) // слева
+					//{
+					//	if ((_countries[j].Y1 >= _countries[i].Y1 && _countries[j].Y1 <= _countries[i].Y2) || (_countries[j].Y2 >= _countries[i].Y1 && _countries[j].Y2 <= _countries[i].Y2))
+					//	{
+					//		_countries[i].Neighbors[j] = true;
+					//		_countries[j].Neighbors[i] = true;
+					//		continue;
+					//	}
+					//}
+					//if (_countries[i].Y1 - 1 == _countries[j].Y2 || _countries[i].Y2 + 1 == _countries[j].Y1) // сверху
+					//{
+					//	if ((_countries[j].X1 >= _countries[i].X1 && _countries[j].X1 <= _countries[i].X2) || (_countries[j].X2 >= _countries[i].X1 && _countries[j].X2 <= _countries[i].X2))
+					//	{
+					//		_countries[i].Neighbors[j] = true;
+					//		_countries[j].Neighbors[i] = true;
+					//	}
+					//}
 				}
 			}
 			/* */
