@@ -14,16 +14,11 @@ namespace euro
 		private int[] _coins; // city balance
 		private int[] _givenCoins; // representative portion of coins
 		private int _countUncompleteCountries;
-		private bool[] _neighborsCountries;
 		private bool isFirstDay = true;
 
 		public int[] Coins
 		{
 			get { return _coins; }
-		}
-		public bool[] NeighborsCountries
-		{
-			get { return _neighborsCountries; }
 		}
 		public int[] GivenCoins
 		{
@@ -38,7 +33,6 @@ namespace euro
 		{
 			_coins = new int[numberOfCountry];
 			_givenCoins = new int[numberOfCountry];
-			_neighborsCountries = new bool[numberOfCountry];
 			_numberOfCountry = numberOfCountry;
 			_countUncompleteCountries = _numberOfCountry - 1;
 
@@ -80,7 +74,6 @@ namespace euro
 
 					if (isFirstDay)
 					{
-						_neighborsCountries[i] = true;
 						isFirstDay = false;
 					}
 					

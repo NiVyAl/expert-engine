@@ -129,47 +129,7 @@ namespace euro
 					_YMaxCoordinate = coordinates[3];
 				/* */
 			}
-
-			/* ищу соседей странам */
-			for (int i = 9; i < 10; i++)
-			{
-				Console.WriteLine($"{ _countries[i].X1} { _countries[i].Y1}");
-				Console.WriteLine($"{_countries[i].X2} {_countries[i].Y2}");
-				Console.WriteLine();
-				for (int j = 0; j < _numberOfCountry; j++) // ищем ей соседа из всех стран
-				{
-					if (_countries[i].Neighbors[j] == true || i == j) // если эта страна уже в списке соседей или само с собой, то прекращаем 
-						continue;
-					Console.WriteLine($"{ _countries[j].X1} { _countries[j].Y1}");
-					Console.WriteLine($"{_countries[j].X2} {_countries[j].Y2}");
-					Console.WriteLine($"{_countries[i].X1 - 1} == {_countries[j].X2 } || {_countries[i].X2 + 1} == {_countries[j].X1}");
-					if (_countries[i].X1 - 1 == _countries[j].X2 || _countries[i].X2 + 1 == _countries[j].X1) // слева
-					{
-						Console.WriteLine($"{_countries[j].Y1} >= {_countries[i].Y1} && {_countries[j].Y1} <= {_countries[i].Y2} || {_countries[j].Y2} >= {_countries[i].Y1} && {_countries[j].Y2} <= {_countries[i].Y2}");
-						if ((_countries[j].Y1 >= _countries[i].Y1 && _countries[j].Y1 <= _countries[i].Y2) || (_countries[j].Y2 >= _countries[i].Y1 && _countries[j].Y2 <= _countries[i].Y2))
-						{
-							_countries[i].Neighbors[j] = true;
-							_countries[j].Neighbors[i] = true;
-							Console.WriteLine($"{_countries[i].CountryName} -- { _countries[j].CountryName }");
-							continue;
-						}
-					}
-					Console.WriteLine("----");
-					Console.WriteLine($"{_countries[i].Y1 - 1} == {_countries[j].Y2 } || {_countries[i].Y2 + 1} == {_countries[j].Y1}");
-					if (_countries[i].Y1 - 1 == _countries[j].Y2 || _countries[i].Y2 + 1 == _countries[j].Y1) // сверху
-					{
-						Console.WriteLine($"{_countries[j].X1} >= {_countries[i].X1} && {_countries[j].X1} <= {_countries[i].X2} || {_countries[j].X2} >= {_countries[i].X1} && {_countries[j].X2} <= {_countries[i].X2}");
-						if ((_countries[j].X1 >= _countries[i].X1 && _countries[j].X1 <= _countries[i].X2) || (_countries[j].X2 >= _countries[i].X1 && _countries[j].X2 <= _countries[i].X2))
-						{
-							_countries[i].Neighbors[j] = true;
-							_countries[j].Neighbors[i] = true;
-							Console.WriteLine($"{_countries[i].CountryName} -- { _countries[j].CountryName }");
-						}
-					}
-					Console.WriteLine("------------------------------");
-				}
-			}
-			Console.WriteLine("Проверка завершена");
+			checkCorrectData();
 		}
 
 		/// <summary>
@@ -281,6 +241,36 @@ namespace euro
 		/// </summary>
 		private void checkCorrectData()
 		{
+			/* define the neighbors of each country */
+			for (int i = 0; i < _numberOfCountry; i++)
+			{
+				for (int j = 0; j < _numberOfCountry; j++) // ищем ей соседа из всех стран
+				{
+					if (_countries[i].Neighbors[j] == true || i == j) // если эта страна уже в списке соседей или само с собой, то прекращаем 
+						continue;
+
+					if (_countries[i].X1 - 1 == _countries[j].X2 || _countries[i].X2 + 1 == _countries[j].X1) // слева
+					{
+						if ((_countries[j].Y1 >= _countries[i].Y1 && _countries[j].Y1 <= _countries[i].Y2) || (_countries[j].Y2 >= _countries[i].Y1 && _countries[j].Y2 <= _countries[i].Y2))
+						{
+							_countries[i].Neighbors[j] = true;
+							_countries[j].Neighbors[i] = true;
+							continue;
+						}
+					}
+					if (_countries[i].Y1 - 1 == _countries[j].Y2 || _countries[i].Y2 + 1 == _countries[j].Y1) // сверху
+					{
+						if ((_countries[j].X1 >= _countries[i].X1 && _countries[j].X1 <= _countries[i].X2) || (_countries[j].X2 >= _countries[i].X1 && _countries[j].X2 <= _countries[i].X2))
+						{
+							_countries[i].Neighbors[j] = true;
+							_countries[j].Neighbors[i] = true;
+						}
+					}
+				}
+			}
+			/* */
+
+			/* define if all countries are connected to each other */
 			bool[] correctCountries = new bool[_numberOfCountry];
 			bool[] queueCheck = new bool[_numberOfCountry];
 			queueCheck[0] = true;
@@ -289,7 +279,7 @@ namespace euro
 			while (isCanRun)
 			{
 				isCanRun = false;
-				for (int k = 0; k < _numberOfCountry; k++) // по очереди стран
+				for (int k = 0; k < _numberOfCountry; k++)
 				{
 					if (queueCheck[k] == true && correctCountries[k] == false)
 					{
@@ -304,21 +294,6 @@ namespace euro
 								queueCheck[j] = true;
 							}
 						}
-						/* оптимизировать проход по каждому городу */
-						//for (int i = 0; i < _countries[k].Coordinates.GetLength(0); i++) // по городам
-						//{
-						//	int x = _countries[k].Coordinates[i].X;
-						//	int y = _countries[k].Coordinates[i].Y;
-
-						//	for (int j = 0; j < _numberOfCountry; j++) // прохожу по соседям города
-						//	{
-						//		if (_allCity[x, y].NeighborsCountries[j])
-						//		{
-						//			queueCheck[j] = true;
-						//		}
-						//	}
-						//}
-						/* оптимизировать */
 					}
 				}
 			}
@@ -326,57 +301,9 @@ namespace euro
 			for (int k = 0; k < _numberOfCountry; k++)
 			{
 				if (correctCountries[k] == false)
-					throw new Exception($"Wrong coordinates, cities don't border");
+					throw new Exception($"Wrong coordinates, cities don't border (caseNumber: {_caseNumber})");
 			}
+			/* */
 		}
-		//private List<Neighbors> _neighbors = new List<Neighbors>();
-		////private List<int> _neighbors2 = new List<int>();
-		//private void checkCorrectData()
-		//{
-		//	for (int k = 0; k < _numberOfCountry; k++)
-		//	{
-		//		for (int i = 0; i < _countries[k].Coordinates.GetLength(0); i++)
-		//		{
-		//			int x = _countries[k].Coordinates[i].X;
-		//			int y = _countries[k].Coordinates[i].Y;
-		//			for (int j = 0; j < _numberOfCountry; j++)
-		//			{
-		//				if (_allCity[x, y].NeighborsCountries[j]) // j - index neighbor country
-		//				{
-		//					bool isOriginalPare = true;
-		//					for (int m = 0; m < _neighbors.Count; m++)
-		//					{
-		//						if ((_neighbors[m].n1 == j && _neighbors[m].n2 == k) == false)
-		//						{
-		//							isOriginalPare = false;
-		//						} else if ((_neighbors[m].n2 == j && _neighbors[m].n1 == k) == false)
-		//						{
-		//							isOriginalPare = false;
-		//						}
-		//					}
-		//					if (isOriginalPare)
-		//					{
-		//						Neighbors newPair = new Neighbors();
-		//						newPair.n1 = j;
-		//						newPair.n2 = k;
-		//						Console.WriteLine($"{j}, {k}");
-		//						_neighbors.Add(newPair);
-		//					}
-		//				}
-		//			}
-		//		}
-		//	}
-		//	int[] correctCountries = new int[_numberOfCountry];
-		//	correctCountries[0] = _neighbors[0].n1;
-		//	correctCountries[0 + 1] = _neighbors[0].n2;
-
-		//	for (int i = 1; i < _neighbors.Count; i++)
-		//	{
-		//		if (_neighbors[0].n1 == i)
-		//		{
-
-		//		}
-		//	}
-		//}
 	}
 }
