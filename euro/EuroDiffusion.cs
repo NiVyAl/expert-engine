@@ -251,12 +251,12 @@ namespace euro
 
 					for (int m = 0; m < 2; m++)
 					{
-						if (_countries[i].GivenCoordinates[m] - 1 == _countries[j].GivenCoordinates[m+2] || _countries[i].GivenCoordinates[m + 2] + 1 == _countries[j].GivenCoordinates[m]) // слева
+						if (_countries[i].GivenCoordinates[m] - 1 == _countries[j].GivenCoordinates[m+2] || _countries[i].GivenCoordinates[m + 2] + 1 == _countries[j].GivenCoordinates[m]) // check right/left neighbors
 						{
 							int n = m;
 							if (m == 1)
 								n = m - 2;
-							if ((_countries[j].GivenCoordinates[n+1] >= _countries[i].GivenCoordinates[n + 1] && _countries[j].GivenCoordinates[n + 1] <= _countries[i].GivenCoordinates[n + 3]) || (_countries[j].GivenCoordinates[n + 3] >= _countries[i].GivenCoordinates[n + 1] && _countries[j].GivenCoordinates[n + 3] <= _countries[i].GivenCoordinates[n + 3]))
+							if ((_countries[j].GivenCoordinates[n+1] >= _countries[i].GivenCoordinates[n + 1] && _countries[j].GivenCoordinates[n + 1] <= _countries[i].GivenCoordinates[n + 3]) || (_countries[j].GivenCoordinates[n + 3] >= _countries[i].GivenCoordinates[n + 1] && _countries[j].GivenCoordinates[n + 3] <= _countries[i].GivenCoordinates[n + 3])) // check top/bottom neighbors
 							{
 								_countries[i].Neighbors[j] = true;
 								_countries[j].Neighbors[i] = true;
@@ -264,24 +264,6 @@ namespace euro
 							}
 						}
 					}
-
-					//if (_countries[i].X1 - 1 == _countries[j].X2 || _countries[i].X2 + 1 == _countries[j].X1) // слева
-					//{
-					//	if ((_countries[j].Y1 >= _countries[i].Y1 && _countries[j].Y1 <= _countries[i].Y2) || (_countries[j].Y2 >= _countries[i].Y1 && _countries[j].Y2 <= _countries[i].Y2))
-					//	{
-					//		_countries[i].Neighbors[j] = true;
-					//		_countries[j].Neighbors[i] = true;
-					//		continue;
-					//	}
-					//}
-					//if (_countries[i].Y1 - 1 == _countries[j].Y2 || _countries[i].Y2 + 1 == _countries[j].Y1) // сверху
-					//{
-					//	if ((_countries[j].X1 >= _countries[i].X1 && _countries[j].X1 <= _countries[i].X2) || (_countries[j].X2 >= _countries[i].X1 && _countries[j].X2 <= _countries[i].X2))
-					//	{
-					//		_countries[i].Neighbors[j] = true;
-					//		_countries[j].Neighbors[i] = true;
-					//	}
-					//}
 				}
 			}
 			/* */
